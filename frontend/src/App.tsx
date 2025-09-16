@@ -24,7 +24,7 @@ export default function App() {
       <header className="site-header">
         <div className="container site-header__bar">
           <Link to="/" className="brand" style={{ fontWeight: 700 }}>
-            Mon Portfolio
+            Yassine HAMRI
           </Link>
 
           {/* Bouton burger (mobile) */}
