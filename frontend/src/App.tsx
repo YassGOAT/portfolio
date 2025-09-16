@@ -16,7 +16,7 @@ export default function App() {
       <header className="site-header">
         <div className="container site-header__bar">
           <Link to="/" className="brand" style={{ fontWeight: 700 }}>
-            Mon Portfolio
+            MON PORTFOLIO
           </Link>
 
           <nav className="nav">
@@ -39,7 +39,7 @@ export default function App() {
 
       <footer style={{ borderTop: '1px solid #e5e7eb', background: '#f3f4f6', marginTop: 40 }}>
         <div className="container center" style={{ padding: '24px 0' }}>
-          <small className="text-sm">© {new Date().getFullYear()} Mon Nom. Tous droits réservés.</small>
+          <small className="text-sm">© {new Date().getFullYear()} Yassine HAMRI. Tous droits réservés.</small>
         </div>
       </footer>
     </div>
