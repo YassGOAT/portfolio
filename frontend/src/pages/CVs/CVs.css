@@ -4,6 +4,7 @@
 .cv-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .cv-title { margin:0 0 4px; font-weight:600; }
 .cv-sub { margin:0; color:#6b7280; font-size:.9rem; }
+.cv-btns { display:flex; gap:10px; }
 
 .cv-admin { margin-bottom: 16px; }
 .cv-admin__title { margin: 0 0 10px; font-weight: 600; }
@@ -14,6 +15,7 @@
 .cv-actions { display:flex; gap:10px; grid-column: 1 / -1; }
 .cv-admin-row { display:flex; gap:10px; margin-top: 10px; }
 
-@media (max-width: 720px){
-  .cv-form { grid-template-columns: 1fr; }
-}
+.pdf-viewer { margin-top:12px; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+.pdf-viewer iframe { width:100%; height:70vh; border:0; background:#f9fafb; }
+@media (max-width:720px){ .pdf-viewer iframe { height:65vh; } }
+@media (max-width:480px){ .pdf-viewer iframe { height:60vh; } }

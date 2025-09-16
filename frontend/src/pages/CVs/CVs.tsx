@@ -8,8 +8,14 @@ import type { CV } from '../../types'
 type FormState = {
   label: string
   locale: string
-  file_url: string
+  file: File | null
   is_active: boolean
+}
+
+function fileHref(file_url: string | null): string {
+  if (!file_url) return '#'
+  if (file_url.startsWith('http')) return file_url
+  return `${import.meta.env.VITE_API_URL}${file_url}` // ex: http://localhost:5000/uploads/cv/xxx.pdf
 }
 
 export default function CVs() {
@@ -23,37 +29,44 @@ export default function CVs() {
   const [form, setForm] = useState<FormState>({
     label: '',
     locale: 'fr',
-    file_url: '',
+    file: null,
     is_active: false
   })
 
   const resetForm = () => {
     setEditing(null)
-    setForm({ label: '', locale: 'fr', file_url: '', is_active: false })
+    setForm({ label: '', locale: 'fr', file: null, is_active: false })
   }
 
   // Handlers typés
   const onChangeInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target
-    setForm((f) => ({ ...f, [name]: value }))
+    const { name, value, type, files, checked } = e.target
+    if (type === 'file') {
+      setForm((f) => ({ ...f, file: files && files[0] ? files[0] : null }))
+    } else if (type === 'checkbox') {
+      setForm((f) => ({ ...f, [name]: checked }))
+    } else {
+      setForm((f) => ({ ...f, [name]: value }))
+    }
   }
   const onChangeSelect: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const { name, value } = e.target
     setForm((f) => ({ ...f, [name]: value }))
   }
-  const onChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, checked } = e.target
-    setForm((f) => ({ ...f, [name]: checked }))
-  }
 
   const submitCreate: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-    await api.post('/cvs', {
-      label: form.label || null,
-      locale: form.locale || 'fr',
-      file_url: form.file_url,
-      is_active: form.is_active ? 1 : 0
-    })
+    if (!form.file) {
+      alert('Veuillez choisir un fichier PDF')
+      return
+    }
+    const fd = new FormData()
+    fd.append('file', form.file)
+    fd.append('label', form.label || '')
+    fd.append('locale', form.locale || 'fr')
+    fd.append('is_active', form.is_active ? '1' : '0')
+
+    await api.post('/cvs', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
     resetForm()
     await refetch()
   }
@@ -61,18 +74,21 @@ export default function CVs() {
   const submitUpdate: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
     if (!editing) return
-    await api.put(`/cvs/${editing.id_cv}`, {
-      label: form.label || null,
-      locale: form.locale || 'fr',
-      file_url: form.file_url || null,
-      is_active: form.is_active ? 1 : 0
-    })
+    const fd = new FormData()
+    if (form.file) fd.append('file', form.file)          // optionnel
+    if (form.label) fd.append('label', form.label)
+    if (form.locale) fd.append('locale', form.locale)
+    fd.append('is_active', form.is_active ? '1' : '0')
+
+    await api.put(`/cvs/${editing.id_cv}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
     resetForm()
     await refetch()
   }
 
   const makeActive = async (cv: CV) => {
-    await api.put(`/cvs/${cv.id_cv}`, { is_active: 1 })
+    const fd = new FormData()
+    fd.append('is_active', '1')
+    await api.put(`/cvs/${cv.id_cv}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
     await refetch()
   }
 
@@ -87,19 +103,22 @@ export default function CVs() {
     setForm({
       label: cv.label ?? '',
       locale: cv.locale || 'fr',
-      file_url: cv.file_url,
+      file: null, // on ne précharge pas le fichier
       is_active: !!cv.is_active
     })
   }
 
   if (isLoading) return <p>Chargement…</p>
-  if (error) return <p>Erreur de chargement.</p>
+  if (error) {
+    const msg = (error as any)?.response?.data?.error || (error as Error)?.message || 'Erreur inconnue'
+    return <p>Erreur de chargement : {msg}</p>
+  }
 
   return (
     <>
       {isAdmin && (
         <section className="card cv-admin">
-          <h2 className="cv-admin__title">{editing ? 'Modifier un CV' : 'Ajouter un CV'}</h2>
+          <h2 className="cv-admin__title">{editing ? 'Modifier un CV' : 'Ajouter un CV (PDF)'}</h2>
 
           <form onSubmit={editing ? submitUpdate : submitCreate} className="cv-form">
             <label>
@@ -122,15 +141,15 @@ export default function CVs() {
             </label>
 
             <label className="full">
-              <span>URL du fichier (PDF)</span>
+              <span>Fichier PDF</span>
               <input
-                name="file_url"
+                name="file"
+                type="file"
+                accept="application/pdf"
                 className="input"
-                value={form.file_url}
                 onChange={onChangeInput}
-                required
-                placeholder="https://…/cv.pdf"
               />
+              {form.file && <small className="text-sm">Sélectionné : {form.file.name}</small>}
             </label>
 
             <label className="row">
@@ -138,7 +157,7 @@ export default function CVs() {
                 type="checkbox"
                 name="is_active"
                 checked={form.is_active}
-                onChange={onChangeCheckbox}
+                onChange={onChangeInput}
               />
               <span>Définir comme CV actif</span>
             </label>
@@ -158,37 +177,47 @@ export default function CVs() {
       )}
 
       <ul className="grid grid-cols-2 gap-24 cv-list">
-        {items.map((cv) => (
-          <li key={cv.id_cv} className="card cv-card">
-            <div className="cv-head">
-              <div>
-                <h3 className="cv-title">{cv.label || 'CV'}</h3>
-                <p className="cv-sub">
-                  {(cv.locale || 'fr').toUpperCase()} {cv.is_active ? '• actif' : ''}
-                </p>
+        {items.map((cv) => {
+          const href = fileHref(cv.file_url)
+          return (
+            <li key={cv.id_cv} className="card cv-card">
+              <div className="cv-head">
+                <div>
+                  <h3 className="cv-title">{cv.label || 'CV'}</h3>
+                  <p className="cv-sub">
+                    {(cv.locale || 'fr').toUpperCase()} {cv.is_active ? '• actif' : ''}
+                  </p>
+                </div>
+                <a className="btn" href={href} target="_blank" rel="noreferrer" download>
+                  Télécharger
+                </a>
               </div>
-              <a className="btn" href={cv.file_url} target="_blank" rel="noreferrer">
-                Télécharger
-              </a>
-            </div>
 
-            {isAdmin && (
-              <div className="cv-admin-row">
-                {!cv.is_active && (
-                  <button className="btn btn-light" onClick={() => makeActive(cv)}>
-                    Rendre actif
-                  </button>
-                )}
-                <button className="btn btn-light" onClick={() => startEdit(cv)}>
-                  Modifier
-                </button>
-                <button className="btn btn-danger" onClick={() => removeCV(cv)}>
-                  Supprimer
-                </button>
+              {/* Visionneuse PDF directement visible */}
+              <div className="pdf-viewer">
+                <object data={href} type="application/pdf" width="100%" height="70vh">
+                  <iframe src={href} title={`CV ${cv.id_cv}`} style={{ width:'100%', height:'70vh', border:0 }} />
+                </object>
               </div>
-            )}
-          </li>
-        ))}
+
+              {isAdmin && (
+                <div className="cv-admin-row">
+                  {!cv.is_active && (
+                    <button className="btn btn-light" onClick={() => makeActive(cv)}>
+                      Rendre actif
+                    </button>
+                  )}
+                  <button className="btn btn-light" onClick={() => startEdit(cv)}>
+                    Modifier
+                  </button>
+                  <button className="btn btn-danger" onClick={() => removeCV(cv)}>
+                    Supprimer
+                  </button>
+                </div>
+              )}
+            </li>
+          )
+        })}
       </ul>
     </>
   )
