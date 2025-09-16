@@ -1,9 +1,24 @@
-.cv-list { list-style:none; margin:0; padding:0; }
+.cv-list { list-style: none; margin: 0; padding: 0; }
 
-/* Ajout d'un léger hover pour différencier les cartes CV */
-.cv-card { transition: box-shadow .2s ease; }
+.cv-card { transition: box-shadow .2s ease, border-color .2s ease; cursor: pointer; border: 1px solid #e5e7eb; }
 .cv-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+.cv-card.is-selected { border-color: #2563eb; }
 
 .cv-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .cv-title { margin:0 0 4px; font-weight:600; }
 .cv-sub { margin:0; color:#6b7280; font-size:.9rem; }
+
+.cvs-page .toolbar {
+  display:flex; align-items:center; justify-content:space-between; gap: 16px; margin-bottom: 16px;
+}
+.toolbar-left { display:flex; align-items:center; gap: 16px; flex-wrap: wrap; }
+.field { display:flex; align-items:center; gap: 8px; }
+.field select { padding: 8px 10px; border:1px solid #e5e7eb; border-radius: 8px; background:#fff; }
+.field.checkbox input { margin-right: 6px; }
+
+.viewer { margin-top: 24px; }
+.viewer-title { margin: 0 0 8px; font-weight: 600; }
+.pdf-frame { width: 100%; height: 640px; border: 1px solid #e5e7eb; border-radius: 12px; }
+.muted { color:#6b7280; }
+.no-cv { text-align: center; color: #6b7280; margin-top: 64px; }
+.no-cv img { max-width: 240px; margin-bottom: 16px; }
