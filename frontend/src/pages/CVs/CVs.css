@@ -1,9 +1,9 @@
 .cv-list { list-style:none; margin:0; padding:0; }
-.cv-card { }
+
+/* Ajout d'un léger hover pour différencier les cartes CV */
+.cv-card { transition: box-shadow .2s ease; }
+.cv-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+
 .cv-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .cv-title { margin:0 0 4px; font-weight:600; }
 .cv-sub { margin:0; color:#6b7280; font-size:.9rem; }
-.cv-desc { margin:0 0 10px; }
-.cv-actions { margin-top:8px; }
-.cv-actions a { margin-right:12px; color:#2563eb; text-decoration:none; }
-.cv-actions a:hover { text-decoration:underline; }
