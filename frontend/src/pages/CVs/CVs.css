@@ -12,9 +12,8 @@
 .cv-form label.full { grid-column: 1 / -1; }
 .cv-form label.row { grid-column: 1 / -1; display:flex; flex-direction:row; align-items:center; gap:8px; }
 .cv-actions { display:flex; gap:10px; grid-column: 1 / -1; }
-
-.btn-light { background:#f3f4f6; color:#111827; }
-.btn-danger { background:#dc2626; color:#fff; }
-
 .cv-admin-row { display:flex; gap:10px; margin-top: 10px; }
-.cv-admin-row .btn { flex:1; }
+
+@media (max-width: 720px){
+  .cv-form { grid-template-columns: 1fr; }
+}

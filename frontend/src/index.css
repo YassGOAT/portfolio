@@ -1,41 +1,74 @@
 /* Reset léger + base */
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
+img, video { max-width: 100%; height: auto; display: block; }
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  color: #111827; /* gray-900 */
-  background: #f9fafb; /* gray-50 */
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+  color: #111827;
+  background: #f9fafb;
 }
 
-/* Utilitaires globaux */
+/* Conteneur */
 .container { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+/* Cartes, boutons, inputs */
 .card { background:#fff; border:1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
 .btn { display:inline-block; padding:10px 14px; border-radius:10px; background:#111827; color:#fff; text-decoration:none; border:0; cursor:pointer; }
 .btn:disabled { opacity:.6; cursor:not-allowed; }
+.btn-light { background:#f3f4f6; color:#111827; }
+.btn-danger { background:#dc2626; color:#fff; }
+.input, .textarea, select {
+  width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font:inherit;
+}
+.textarea { min-height: 130px; resize: vertical; }
 
-/* Header & nav */
-.site-header { position: sticky; top: 0; z-index: 10; background:#fff; border-bottom:1px solid #e5e7eb; }
+.text-sm { font-size:.9rem; color:#6b7280; }
+.center { text-align:center; }
+
+/* Header */
+.site-header { position: sticky; top: 0; z-index: 20; background:#fff; border-bottom:1px solid #e5e7eb; }
 .site-header__bar { height:56px; display:flex; align-items:center; justify-content:space-between; }
-.nav { display:flex; gap:16px; }
+.nav-group { display:flex; align-items:center; gap:16px; }
+.nav { display:flex; gap:16px; flex-wrap:wrap; }
 .nav a { color:#374151; text-decoration:none; }
 .nav a:hover { color:#2563eb; }
 .nav .active { color:#2563eb; font-weight:600; }
+
+/* Burger */
+.mobile-toggle { display:none; width:40px; height:40px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; align-items:center; justify-content:center; gap:4px; }
+.mobile-toggle span { width:18px; height:2px; background:#111827; display:block; }
+.mobile-menu { display:none; }
 
 /* Grids génériques */
 .grid { display:grid; gap:24px; }
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
 .grid-cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
-@media (max-width: 900px){ .grid-cols-3 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 640px){ .grid-cols-2, .grid-cols-3 { grid-template-columns: 1fr; } }
 
-/* Formulaires */
-.input, .textarea {
-  width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font:inherit;
+/* Breakpoints */
+@media (max-width: 900px){
+  .grid-cols-3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
-.textarea { min-height: 130px; resize: vertical; }
+@media (max-width: 720px){
+  /* NAV: on passe en mobile */
+  .mobile-toggle { display:inline-flex; }
+  .nav-group { display:none; }           /* cache la nav desktop */
+  .mobile-menu {
+    display:none; position:absolute; top:56px; left:0; right:0;
+    background:#fff; border-bottom:1px solid #e5e7eb; padding:12px 16px;
+  }
+  .mobile-menu.open { display:block; }
+  .mobile-menu .nav { flex-direction:column; gap:12px; }
 
-/* Helpers */
+  /* Grilles */
+  .grid-cols-2, .grid-cols-3 { grid-template-columns: 1fr; }
+}
+
+/* Petits helpers marges */
 .m-0 { margin:0; } .mb-2 { margin-bottom:8px; } .mb-3 { margin-bottom:12px; } .mb-4 { margin-bottom:16px; } .mt-6 { margin-top:24px; }
-.text-sm { font-size:.9rem; color:#6b7280; }
-.center { text-align:center; }
+.mt-8 { margin-top:32px; } .mt-10 { margin-top:40px; }
+.mt-12 { margin-top:48px; } .mt-16 { margin-top:64px; }
+.mt-20 { margin-top:80px; } .mt-24 { margin-top:96px; }
+.mt-32 { margin-top:128px; } .mt-40 { margin-top:160px; }
+.mt-48 { margin-top:192px; } .mt-56 { margin-top:224px; }
+.mt-64 { margin-top:256px; }

@@ -10,3 +10,5 @@
 @media (max-width: 640px){ .gallery-grid { grid-template-columns: 1fr; } }
 .project-links a { display:inline-block; margin-right:12px; color:#2563eb; text-decoration:none; }
 .project-links a:hover { text-decoration:underline; }
+
+@media (max-width: 640px){ .gallery-grid { grid-template-columns: 1fr; } }

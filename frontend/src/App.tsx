@@ -1,35 +1,111 @@
+import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import { useMe } from './hooks/useAuth'
 import './index.css'
 
-const LINKS: [to: string, label: string][] = [
+const MAIN_LINKS: [to: string, label: string][] = [
   ['/', 'Présentation'],
   ['/skills', 'Compétences'],
   ['/projects', 'Projets'],
   ['/certifications', 'Certifications'],
   ['/cvs', 'CV'],
   ['/contact', 'Contact'],
-  ['/profile', 'Profil'],
 ]
 
 export default function App() {
+  const { data: me, isLoading } = useMe()
+  const user = me?.user
+  const [open, setOpen] = useState(false)
+
+  const closeMobile = () => setOpen(false)
+
   return (
     <div className="app">
       <header className="site-header">
         <div className="container site-header__bar">
           <Link to="/" className="brand" style={{ fontWeight: 700 }}>
-            MON PORTFOLIO
+            Mon Portfolio
           </Link>
 
+          {/* Bouton burger (mobile) */}
+          <button
+            aria-label="Ouvrir le menu"
+            className="mobile-toggle"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          {/* Nav desktop */}
+          <div className="nav-group">
+            <nav className="nav">
+              {MAIN_LINKS.map(([to, label]) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) => (isActive ? 'active' : undefined)}
+                >
+                  {label}
+                </NavLink>
+              ))}
+            </nav>
+
+            <nav className="nav">
+              {isLoading ? null : user ? (
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) => (isActive ? 'active' : undefined)}
+                  title={user.email}
+                >
+                  {user.name || user.email}
+                </NavLink>
+              ) : (
+                <>
+                  <NavLink
+                    to="/profile?t=login"
+                    className={({ isActive }) => (isActive ? 'active' : undefined)}
+                  >
+                    Se connecter
+                  </NavLink>
+                  <NavLink
+                    to="/profile?t=register"
+                    className={({ isActive }) => (isActive ? 'active' : undefined)}
+                  >
+                    S’inscrire
+                  </NavLink>
+                </>
+              )}
+            </nav>
+          </div>
+        </div>
+
+        {/* Menu mobile déroulant */}
+        <div className={`mobile-menu${open ? ' open' : ''}`}>
           <nav className="nav">
-            {LINKS.map(([to, label]) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) => (isActive ? 'active' : undefined)}
-              >
+            {MAIN_LINKS.map(([to, label]) => (
+              <NavLink key={to} to={to} onClick={closeMobile}>
                 {label}
               </NavLink>
             ))}
+          </nav>
+          <hr />
+          <nav className="nav">
+            {user ? (
+              <NavLink to="/profile" onClick={closeMobile} title={user.email}>
+                {user.name || user.email}
+              </NavLink>
+            ) : (
+              <>
+                <NavLink to="/profile?t=login" onClick={closeMobile}>
+                  Se connecter
+                </NavLink>
+                <NavLink to="/profile?t=register" onClick={closeMobile}>
+                  S’inscrire
+                </NavLink>
+              </>
+            )}
           </nav>
         </div>
       </header>
@@ -40,7 +116,7 @@ export default function App() {
 
       <footer style={{ borderTop: '1px solid #e5e7eb', background: '#f3f4f6', marginTop: 40 }}>
         <div className="container center" style={{ padding: '24px 0' }}>
-          <small className="text-sm">© {new Date().getFullYear()} Yassine HAMRI. Tous droits réservés.</small>
+          <small className="text-sm">© {new Date().getFullYear()} Mon Nom. Tous droits réservés.</small>
         </div>
       </footer>
     </div>

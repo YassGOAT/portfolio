@@ -2,16 +2,25 @@ import './Profile.css'
 import { useState } from 'react'
 import { useLogin, useMe, useRegister, logout } from '../../hooks/useAuth'
 import { api } from '../../lib/http'
+import { useSearchParams } from 'react-router-dom'
 
 export default function Profile() {
   const me = useMe()
   const reg = useRegister()
   const log = useLogin()
 
-  const [tab, setTab] = useState<'login' | 'register'>('login')
+  const [sp, setSp] = useSearchParams()
+  const initialTab = sp.get('t') === 'register' ? 'register' : 'login'
+  const [tab, setTab] = useState<'login' | 'register'>(initialTab as 'login' | 'register')
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const switchTab = (t: 'login' | 'register') => {
+    setTab(t)
+    setSp({ t })
+  }
 
   const onRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -54,22 +63,22 @@ export default function Profile() {
 
         {u.role === 'admin' && (
           <p className="admin-note">
-            Vous êtes connecté en <b>admin</b> — les boutons d’admin (ex: CRUD CV) sont visibles.
+            Vous êtes connecté en <b>admin</b> — les boutons d’admin (ex: CRUD CV) sont visibles sur la page CV.
           </p>
         )}
       </section>
     )
   }
 
-  // Non connecté : login / register
+  // Non connecté : onglets Connexion / Inscription
   return (
     <section className="card profile">
       <div className="tabs">
-        <button className={tab === 'login' ? 'tab active' : 'tab'} onClick={() => setTab('login')}>
-          Connexion
+        <button className={tab === 'login' ? 'tab active' : 'tab'} onClick={() => switchTab('login')}>
+          Se connecter
         </button>
-        <button className={tab === 'register' ? 'tab active' : 'tab'} onClick={() => setTab('register')}>
-          Inscription
+        <button className={tab === 'register' ? 'tab active' : 'tab'} onClick={() => switchTab('register')}>
+          S’inscrire
         </button>
       </div>
 
