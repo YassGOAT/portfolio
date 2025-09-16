@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
+import Presentation from './pages/Presentation/Presentation';
+import Skills from './pages/Skills/Skills';
+import Projects from './pages/Projects/Projects';
+import ProjectDetails from './pages/ProjectDetails/ProjectDetails';
+import Certifications from './pages/Certifications/Certifications';
+import CVs from './pages/CVs/CVs';
+import Contact from './pages/Contact/Contact';
 import App from './App';
-import Presentation from './pages/Presentation';
-import Skills from './pages/Skills';
-import Projects from './pages/Projects';
-import ProjectDetails from './pages/ProjectDetails';
-import Certifications from './pages/Certifications';
-import CVs from './pages/CVs';
-import Contact from './pages/Contact';
 
 const qc = new QueryClient()
 

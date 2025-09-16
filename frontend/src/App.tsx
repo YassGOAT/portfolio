@@ -1,26 +1,30 @@
-import { Link, Outlet, NavLink } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
+import './index.css'
+
+const LINKS: [to: string, label: string][] = [
+  ['/', 'Présentation'],
+  ['/skills', 'Compétences'],
+  ['/projects', 'Projets'],
+  ['/certifications', 'Certifications'],
+  ['/cvs', 'CV'],
+  ['/contact', 'Contact'],
+]
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <header className="border-b bg-white sticky top-0 z-10">
-        <div className="container flex items-center justify-between h-14">
-          <Link to="/" className="font-bold text-lg">Mon Portfolio</Link>
-          <nav className="flex gap-6 text-sm">
-            {[
-              ['/', 'Présentation'],
-              ['/skills','Compétences'],
-              ['/projects','Projets'],
-              ['/certifications','Certifications'],
-              ['/cvs','CV'],
-              ['/contact','Contact']
-            ].map(([to,label])=>(
+    <div className="app">
+      <header className="site-header">
+        <div className="container site-header__bar">
+          <Link to="/" className="brand" style={{ fontWeight: 700 }}>
+            Mon Portfolio
+          </Link>
+
+          <nav className="nav">
+            {LINKS.map(([to, label]) => (
               <NavLink
                 key={to}
                 to={to}
-                className={({isActive}) =>
-                  `hover:text-blue-600 transition ${isActive ? 'text-blue-600 font-semibold' : 'text-gray-700'}`
-                }
+                className={({ isActive }) => (isActive ? 'active' : undefined)}
               >
                 {label}
               </NavLink>
@@ -29,12 +33,15 @@ export default function App() {
         </div>
       </header>
 
-      <main className="container py-8">
+      <main className="container" style={{ padding: '32px 0' }}>
         <Outlet />
-        <h1 className="text-3xl font-bold underline text-blue-600">Hello Tailwind</h1>
-
       </main>
-      <footer className="container py-10 text-sm text-gray-500">© {new Date().getFullYear()}</footer>
+
+      <footer style={{ borderTop: '1px solid #e5e7eb', background: '#f3f4f6', marginTop: 40 }}>
+        <div className="container center" style={{ padding: '24px 0' }}>
+          <small className="text-sm">© {new Date().getFullYear()} Mon Nom. Tous droits réservés.</small>
+        </div>
+      </footer>
     </div>
   )
 }

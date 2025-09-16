@@ -1,9 +1,41 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Reset léger + base */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: #111827; /* gray-900 */
+  background: #f9fafb; /* gray-50 */
+}
 
+/* Utilitaires globaux */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+.card { background:#fff; border:1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.btn { display:inline-block; padding:10px 14px; border-radius:10px; background:#111827; color:#fff; text-decoration:none; border:0; cursor:pointer; }
+.btn:disabled { opacity:.6; cursor:not-allowed; }
 
-/* petites bases */
-:root { color-scheme: light dark; }
-.container { @apply mx-auto max-w-6xl px-4; }
-.card { @apply rounded-2xl shadow p-6; }
+/* Header & nav */
+.site-header { position: sticky; top: 0; z-index: 10; background:#fff; border-bottom:1px solid #e5e7eb; }
+.site-header__bar { height:56px; display:flex; align-items:center; justify-content:space-between; }
+.nav { display:flex; gap:16px; }
+.nav a { color:#374151; text-decoration:none; }
+.nav a:hover { color:#2563eb; }
+.nav .active { color:#2563eb; font-weight:600; }
+
+/* Grids génériques */
+.grid { display:grid; gap:24px; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width: 900px){ .grid-cols-3 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 640px){ .grid-cols-2, .grid-cols-3 { grid-template-columns: 1fr; } }
+
+/* Formulaires */
+.input, .textarea {
+  width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font:inherit;
+}
+.textarea { min-height: 130px; resize: vertical; }
+
+/* Helpers */
+.m-0 { margin:0; } .mb-2 { margin-bottom:8px; } .mb-3 { margin-bottom:12px; } .mb-4 { margin-bottom:16px; } .mt-6 { margin-top:24px; }
+.text-sm { font-size:.9rem; color:#6b7280; }
+.center { text-align:center; }

@@ -1,0 +1,6 @@
+.cert-title { margin:0 0 6px; font-weight:600; }
+.cert-sub { margin:0 0 8px; color:#6b7280; font-size:.9rem; }
+.cert-desc { margin:0 0 10px; }
+.cert-actions { margin-top: 8px; }
+.cert-actions a { margin-right:12px; color:#2563eb; text-decoration:none; }
+.cert-actions a:hover { text-decoration:underline; }    
