@@ -8,6 +8,8 @@ import skillsRoutes from './routes/skills.routes.js';
 import projectsRoutes from './routes/projects.routes.js';
 import certificationsRoutes from './routes/certifications.routes.js';
 import cvsRoutes from './routes/cvs.routes.js';
+import contactRoutes from './routes/contact.routes.js';
+
 
 const app = express();
 
@@ -21,6 +23,26 @@ app.use('/api/skills', skillsRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api/certifications', certificationsRoutes);
 app.use('/api/cvs', cvsRoutes);
+app.use('/api/contact', contactRoutes);
+
+// Route racine pour éviter le 404 sur "/"
+app.get('/', (_req, res) => {
+  res.json({
+    name: 'Portfolio API',
+    version: '1.0.0',
+    endpoints: [
+      'GET /api/health',
+      'GET /api/presentations?locale=fr',
+      'GET /api/skills',
+      'GET /api/projects?search=&page=1&limit=10&featured=0',
+      'GET /api/projects/:id/images',
+      'GET /api/projects/:id/skills',
+      'GET /api/projects/slug/:slug',
+      'GET /api/certifications',
+      'GET /api/cvs?active=1'
+    ]
+  });
+});
 
 // 404 minimal
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
