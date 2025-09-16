@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-
+import authRoutes from './routes/auth.routes.js';
 import healthRoutes from './routes/health.routes.js';
 import presentationsRoutes from './routes/presentations.routes.js';
 import skillsRoutes from './routes/skills.routes.js';
@@ -9,6 +9,7 @@ import projectsRoutes from './routes/projects.routes.js';
 import certificationsRoutes from './routes/certifications.routes.js';
 import cvsRoutes from './routes/cvs.routes.js';
 import contactRoutes from './routes/contact.routes.js';
+import { pool } from './db.js';
 
 
 const app = express();
@@ -24,6 +25,10 @@ app.use('/api/projects', projectsRoutes);
 app.use('/api/certifications', certificationsRoutes);
 app.use('/api/cvs', cvsRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/me', authRoutes);
+app.set('pool', pool);
+app.use('/api/auth', authRoutes);
+
 
 // Route racine pour éviter le 404 sur "/"
 app.get('/', (_req, res) => {

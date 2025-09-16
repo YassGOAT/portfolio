@@ -11,6 +11,8 @@ import Certifications from './pages/Certifications/Certifications';
 import CVs from './pages/CVs/CVs';
 import Contact from './pages/Contact/Contact';
 import App from './App';
+import Profile from './pages/Profile/Profile'
+
 
 const qc = new QueryClient()
 
@@ -26,6 +28,7 @@ const router = createBrowserRouter([
       { path: 'certifications', element: <Certifications /> },
       { path: 'cvs', element: <CVs /> },
       { path: 'contact', element: <Contact /> },
+      { path: 'profile', element: <Profile /> }
     ]
   }
 ])

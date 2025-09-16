@@ -1,8 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-
-// ⚠️ Avec "verbatimModuleSyntax", les types doivent être importés en type-only
 import type { AxiosError } from 'axios'
+import { api } from '../lib/http'
+
 import type {
   CV,
   Certification,
@@ -13,12 +12,6 @@ import type {
   ProjectsPage,
   Skill
 } from '../types'
-
-// ✅ plus de "any" : on tape import.meta.env correctement
-const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
-  headers: { 'Content-Type': 'application/json' }
-})
 
 export function usePresentation(locale: string = 'fr') {
   return useQuery<Presentation[]>({
@@ -33,10 +26,7 @@ export function usePresentation(locale: string = 'fr') {
 export function useSkills() {
   return useQuery<Skill[]>({
     queryKey: ['skills'],
-    queryFn: async () => {
-      const { data } = await api.get<Skill[]>('/skills')
-      return data
-    }
+    queryFn: async () => (await api.get<Skill[]>('/skills')).data
   })
 }
 
@@ -44,12 +34,8 @@ export function useProjects(params: { page?: number; limit?: number; featured?: 
   const { page = 1, limit = 9, featured, search } = params
   return useQuery<ProjectsPage>({
     queryKey: ['projects', { page, limit, featured, search }],
-    queryFn: async () => {
-      const { data } = await api.get<ProjectsPage>('/projects', {
-        params: { page, limit, featured, search }
-      })
-      return data
-    }
+    queryFn: async () =>
+      (await api.get<ProjectsPage>('/projects', { params: { page, limit, featured, search } })).data
   })
 }
 
@@ -57,40 +43,54 @@ export function useProjectBySlug(slug: string) {
   return useQuery<ProjectDetail>({
     queryKey: ['project', slug],
     enabled: !!slug,
-    queryFn: async () => {
-      const { data } = await api.get<ProjectDetail>(`/projects/slug/${slug}`, {
-        params: { include: 'images,skills' }
-      })
-      return data
-    }
+    queryFn: async () =>
+      (await api.get<ProjectDetail>(`/projects/slug/${slug}`, { params: { include: 'images,skills' } })).data
   })
 }
 
 export function useCertifications() {
   return useQuery<Certification[]>({
     queryKey: ['certifications'],
-    queryFn: async () => {
-      const { data } = await api.get<Certification[]>('/certifications')
-      return data
-    }
+    queryFn: async () => (await api.get<Certification[]>('/certifications')).data
   })
 }
 
 export function useCVs(active?: boolean) {
   return useQuery<CV[]>({
     queryKey: ['cvs', active],
-    queryFn: async () => {
-      const { data } = await api.get<CV[]>('/cvs', { params: active ? { active: 1 } : {} })
-      return data
-    }
+    queryFn: async () => (await api.get<CV[]>('/cvs', { params: active ? { active: 1 } : {} })).data
   })
 }
 
 export function useSendContact() {
   return useMutation<ContactResponse, AxiosError<{ error: string }>, ContactPayload>({
-    mutationFn: async (payload) => {
-      const { data } = await api.post<ContactResponse>('/contact', payload)
-      return data
+    mutationFn: async (payload) => (await api.post<ContactResponse>('/contact', payload)).data
+  })
+}
+export function usePortfolio() {
+  return useQuery<{
+    presentation: Presentation[]
+    skills: Skill[]
+    projects: ProjectsPage
+    certifications: Certification[]
+    cvs: CV[] | null
+  }>({
+    queryKey: ['portfolio'],
+    queryFn: async () => {
+      const [presentation, skills, projects, certifications, cvs] = await Promise.all([ 
+        api.get<Presentation[]>('/presentations', { params: { locale: 'fr' } }),
+        api.get<Skill[]>('/skills'),
+        api.get<ProjectsPage>('/projects', { params: { page: 1, limit: 3, featured: 1 } }),
+        api.get<Certification[]>('/certifications'),
+        api.get<CV[]>('/cvs', { params: { active: 1 } })
+      ])  
+      return {
+        presentation: presentation.data,
+        skills: skills.data,
+        projects: projects.data,
+        certifications: certifications.data,
+        cvs: cvs.data
+      }
     }
   })
 }

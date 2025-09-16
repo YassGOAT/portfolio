@@ -1,87 +1,165 @@
 import './CVs.css'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useCVs } from '../../hooks/usePortfolio'
+import { useMe } from '../../hooks/useAuth'
+import { api } from '../../lib/http'
 import type { CV } from '../../types'
 
+type FormState = {
+  label: string
+  locale: string
+  file_url: string
+  is_active: boolean
+}
+
 export default function CVs() {
-  // On récupère tous les CV (on filtre côté front)
-  const { data, isLoading, error } = useCVs()
+  const { data, isLoading, error, refetch } = useCVs()
+  const { data: meData } = useMe()
+  const isAdmin = meData?.user?.role === 'admin'
 
-  const [locale, setLocale] = useState<string>('all')
-  const [onlyActive, setOnlyActive] = useState<boolean>(false)
-  const [selected, setSelected] = useState<CV | null>(null)
+  const items: CV[] = useMemo(() => data ?? [], [data])
 
-  // Locales disponibles (ex: ["fr","en"])
-  const locales = useMemo<string[]>(
-    () => Array.from(new Set((data ?? []).map(cv => cv.locale))).sort(),
-    [data]
-  )
+  const [editing, setEditing] = useState<CV | null>(null)
+  const [form, setForm] = useState<FormState>({
+    label: '',
+    locale: 'fr',
+    file_url: '',
+    is_active: false
+  })
 
-  // Appliquer les filtres
-  const filtered: CV[] = useMemo(() => {
-    let arr = (data ?? [])
-    if (locale !== 'all') arr = arr.filter(cv => cv.locale === locale)
-    if (onlyActive) arr = arr.filter(cv => cv.is_active === 1)
-    return arr
-  }, [data, locale, onlyActive])
+  const resetForm = () => {
+    setEditing(null)
+    setForm({ label: '', locale: 'fr', file_url: '', is_active: false })
+  }
 
-  // Sélection par défaut
-  useEffect(() => {
-    if (!filtered.length) { setSelected(null); return }
-    if (!selected || !filtered.some(cv => cv.id_cv === selected.id_cv)) {
-      setSelected(filtered[0])
-    }
-  }, [filtered, selected])
+  // Handlers typés
+  const onChangeInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { name, value } = e.target
+    setForm((f) => ({ ...f, [name]: value }))
+  }
+  const onChangeSelect: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+    const { name, value } = e.target
+    setForm((f) => ({ ...f, [name]: value }))
+  }
+  const onChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { name, checked } = e.target
+    setForm((f) => ({ ...f, [name]: checked }))
+  }
+
+  const submitCreate: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+    await api.post('/cvs', {
+      label: form.label || null,
+      locale: form.locale || 'fr',
+      file_url: form.file_url,
+      is_active: form.is_active ? 1 : 0
+    })
+    resetForm()
+    await refetch()
+  }
+
+  const submitUpdate: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+    if (!editing) return
+    await api.put(`/cvs/${editing.id_cv}`, {
+      label: form.label || null,
+      locale: form.locale || 'fr',
+      file_url: form.file_url || null,
+      is_active: form.is_active ? 1 : 0
+    })
+    resetForm()
+    await refetch()
+  }
+
+  const makeActive = async (cv: CV) => {
+    await api.put(`/cvs/${cv.id_cv}`, { is_active: 1 })
+    await refetch()
+  }
+
+  const removeCV = async (cv: CV) => {
+    if (!confirm('Supprimer ce CV ?')) return
+    await api.delete(`/cvs/${cv.id_cv}`)
+    await refetch()
+  }
+
+  const startEdit = (cv: CV) => {
+    setEditing(cv)
+    setForm({
+      label: cv.label ?? '',
+      locale: cv.locale || 'fr',
+      file_url: cv.file_url,
+      is_active: !!cv.is_active
+    })
+  }
 
   if (isLoading) return <p>Chargement…</p>
   if (error) return <p>Erreur de chargement.</p>
 
   return (
-    <section className="cvs-page">
-      {/* Barre de filtres */}
-      <div className="toolbar card">
-        <div className="toolbar-left">
-          <label className="field">
-            <span>Langue</span>
-            <select value={locale} onChange={e => setLocale(e.target.value)}>
-              <option value="all">Toutes</option>
-              {locales.map(l => (
-                <option key={l} value={l}>{l.toUpperCase()}</option>
-              ))}
-            </select>
-          </label>
+    <>
+      {isAdmin && (
+        <section className="card cv-admin">
+          <h2 className="cv-admin__title">{editing ? 'Modifier un CV' : 'Ajouter un CV'}</h2>
 
-          <label className="field checkbox">
-            <input
-              type="checkbox"
-              checked={onlyActive}
-              onChange={e => setOnlyActive(e.target.checked)}
-            />
-            <span>N’afficher que l’actif</span>
-          </label>
-        </div>
+          <form onSubmit={editing ? submitUpdate : submitCreate} className="cv-form">
+            <label>
+              <span>Label</span>
+              <input
+                name="label"
+                className="input"
+                value={form.label}
+                onChange={onChangeInput}
+                placeholder="CV FR / CV EN"
+              />
+            </label>
 
-        <div className="toolbar-right">
-          {selected && (
-            <a className="btn" href={selected.file_url} target="_blank" rel="noreferrer">
-              Télécharger le CV sélectionné
-            </a>
-          )}
-        </div>
-      </div>
+            <label>
+              <span>Langue</span>
+              <select name="locale" className="input" value={form.locale} onChange={onChangeSelect}>
+                <option value="fr">FR</option>
+                <option value="en">EN</option>
+              </select>
+            </label>
 
-      {/* Grille des CVs */}
+            <label className="full">
+              <span>URL du fichier (PDF)</span>
+              <input
+                name="file_url"
+                className="input"
+                value={form.file_url}
+                onChange={onChangeInput}
+                required
+                placeholder="https://…/cv.pdf"
+              />
+            </label>
+
+            <label className="row">
+              <input
+                type="checkbox"
+                name="is_active"
+                checked={form.is_active}
+                onChange={onChangeCheckbox}
+              />
+              <span>Définir comme CV actif</span>
+            </label>
+
+            <div className="cv-actions">
+              <button className="btn" type="submit">
+                {editing ? 'Enregistrer' : 'Créer'}
+              </button>
+              {editing && (
+                <button type="button" className="btn btn-light" onClick={resetForm}>
+                  Annuler
+                </button>
+              )}
+            </div>
+          </form>
+        </section>
+      )}
+
       <ul className="grid grid-cols-2 gap-24 cv-list">
-        {filtered.map(cv => (
-          <li
-            key={cv.id_cv}
-            className={`card cv-card ${selected?.id_cv === cv.id_cv ? 'is-selected' : ''}`}
-            onClick={() => setSelected(cv)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setSelected(cv)}
-            aria-label={`CV ${cv.label ?? ''} ${cv.locale?.toUpperCase()}`}
-          >
+        {items.map((cv) => (
+          <li key={cv.id_cv} className="card cv-card">
             <div className="cv-head">
               <div>
                 <h3 className="cv-title">{cv.label || 'CV'}</h3>
@@ -93,23 +171,25 @@ export default function CVs() {
                 Télécharger
               </a>
             </div>
+
+            {isAdmin && (
+              <div className="cv-admin-row">
+                {!cv.is_active && (
+                  <button className="btn btn-light" onClick={() => makeActive(cv)}>
+                    Rendre actif
+                  </button>
+                )}
+                <button className="btn btn-light" onClick={() => startEdit(cv)}>
+                  Modifier
+                </button>
+                <button className="btn btn-danger" onClick={() => removeCV(cv)}>
+                  Supprimer
+                </button>
+              </div>
+            )}
           </li>
         ))}
       </ul>
-
-      {/* Aperçu PDF */}
-      <div className="viewer card">
-        <h2 className="viewer-title">Aperçu</h2>
-        {!selected ? (
-          <p className="muted">Aucun CV à afficher avec ces filtres.</p>
-        ) : (
-          <iframe
-            title={selected.label ?? `CV ${selected.locale?.toUpperCase()}`}
-            src={selected.file_url}
-            className="pdf-frame"
-          />
-        )}
-      </div>
-    </section>
+    </>
   )
 }

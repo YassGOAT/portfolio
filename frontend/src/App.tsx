@@ -8,6 +8,7 @@ const LINKS: [to: string, label: string][] = [
   ['/certifications', 'Certifications'],
   ['/cvs', 'CV'],
   ['/contact', 'Contact'],
+  ['/profile', 'Profil'],
 ]
 
 export default function App() {
