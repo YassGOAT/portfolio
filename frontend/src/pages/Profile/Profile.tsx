@@ -2,25 +2,22 @@ import './Profile.css'
 import { useState } from 'react'
 import { useLogin, useMe, useRegister, logout } from '../../hooks/useAuth'
 import { api } from '../../lib/http'
-import { useSearchParams } from 'react-router-dom'
+
+type View = 'choose' | 'login' | 'register'
 
 export default function Profile() {
   const me = useMe()
   const reg = useRegister()
   const log = useLogin()
 
-  const [sp, setSp] = useSearchParams()
-  const initialTab = sp.get('t') === 'register' ? 'register' : 'login'
-  const [tab, setTab] = useState<'login' | 'register'>(initialTab as 'login' | 'register')
+  // Vue par défaut : question Oui/Non
+  const [view, setView] = useState<View>('choose')
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const switchTab = (t: 'login' | 'register') => {
-    setTab(t)
-    setSp({ t })
-  }
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   const onRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -35,7 +32,6 @@ export default function Profile() {
   }
 
   const onDeleteMe = async () => {
-    if (!confirm('Supprimer votre compte ? Cette action est irréversible.')) return
     await api.delete('/auth/me')
     logout()
     location.reload()
@@ -56,9 +52,20 @@ export default function Profile() {
           <button className="btn" onClick={() => { logout(); location.reload() }}>
             Se déconnecter
           </button>
-          <button className="btn btn-danger" onClick={onDeleteMe}>
-            Supprimer mon compte
-          </button>
+
+          {!confirmDelete ? (
+            <button className="btn btn-danger" onClick={() => setConfirmDelete(true)}>
+              Supprimer mon compte
+            </button>
+          ) : (
+            <div className="confirm">
+              <span>Confirmer la suppression ?</span>
+              <div className="row">
+                <button className="btn btn-danger" onClick={onDeleteMe}>Oui</button>
+                <button className="btn btn-light" onClick={() => setConfirmDelete(false)}>Non</button>
+              </div>
+            </div>
+          )}
         </div>
 
         {u.role === 'admin' && (
@@ -70,33 +77,44 @@ export default function Profile() {
     )
   }
 
-  // Non connecté : onglets Connexion / Inscription
+  // Non connecté
   return (
     <section className="card profile">
-      <div className="tabs">
-        <button className={tab === 'login' ? 'tab active' : 'tab'} onClick={() => switchTab('login')}>
-          Se connecter
-        </button>
-        <button className={tab === 'register' ? 'tab active' : 'tab'} onClick={() => switchTab('register')}>
-          S’inscrire
-        </button>
-      </div>
-
-      {tab === 'login' ? (
-        <form onSubmit={onLogin} className="form">
-          <input className="input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required type="email" />
-          <input className="input" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} required type="password" />
-          <button className="btn" disabled={log.isPending}>{log.isPending ? 'Connexion…' : 'Se connecter'}</button>
-          {log.isError && <p className="error">{(log.error as any)?.response?.data?.error || 'Erreur'}</p>}
-        </form>
+      {view === 'choose' ? (
+        <div className="choose">
+          <h1 className="title">Avez-vous déjà un compte ?</h1>
+          <div className="row">
+            <button className="btn" onClick={() => setView('login')}>Oui</button>
+            <button className="btn btn-light" onClick={() => setView('register')}>Non</button>
+          </div>
+        </div>
+      ) : view === 'login' ? (
+        <>
+          <h1 className="title">Se connecter</h1>
+          <form onSubmit={onLogin} className="form">
+            <input className="input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required type="email" />
+            <input className="input" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} required type="password" />
+            <div className="row">
+              <button className="btn" disabled={log.isPending}>{log.isPending ? 'Connexion…' : 'Se connecter'}</button>
+              <button type="button" className="btn btn-light" onClick={() => setView('register')}>Créer un compte</button>
+            </div>
+            {log.isError && <p className="error">{(log.error as any)?.response?.data?.error || 'Erreur'}</p>}
+          </form>
+        </>
       ) : (
-        <form onSubmit={onRegister} className="form">
-          <input className="input" placeholder="Nom" value={name} onChange={e => setName(e.target.value)} required minLength={2} />
-          <input className="input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required type="email" />
-          <input className="input" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} required type="password" />
-          <button className="btn" disabled={reg.isPending}>{reg.isPending ? 'Création…' : 'Créer mon compte'}</button>
-          {reg.isError && <p className="error">{(reg.error as any)?.response?.data?.error || 'Erreur'}</p>}
-        </form>
+        <>
+          <h1 className="title">Créer un compte</h1>
+          <form onSubmit={onRegister} className="form">
+            <input className="input" placeholder="Nom" value={name} onChange={e => setName(e.target.value)} required minLength={2} />
+            <input className="input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required type="email" />
+            <input className="input" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} required type="password" />
+            <div className="row">
+              <button className="btn" disabled={reg.isPending}>{reg.isPending ? 'Création…' : 'Créer mon compte'}</button>
+              <button type="button" className="btn btn-light" onClick={() => setView('login')}>J’ai déjà un compte</button>
+            </div>
+            {reg.isError && <p className="error">{(reg.error as any)?.response?.data?.error || 'Erreur'}</p>}
+          </form>
+        </>
       )}
     </section>
   )

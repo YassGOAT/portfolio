@@ -31,22 +31,16 @@ export default function App() {
           <button
             aria-label="Ouvrir le menu"
             className="mobile-toggle"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpen(v => !v)}
           >
-            <span />
-            <span />
-            <span />
+            <span /><span /><span />
           </button>
 
           {/* Nav desktop */}
           <div className="nav-group">
             <nav className="nav">
               {MAIN_LINKS.map(([to, label]) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  className={({ isActive }) => (isActive ? 'active' : undefined)}
-                >
+                <NavLink key={to} to={to} className={({ isActive }) => (isActive ? 'active' : undefined)}>
                   {label}
                 </NavLink>
               ))}
@@ -62,26 +56,15 @@ export default function App() {
                   {user.name || user.email}
                 </NavLink>
               ) : (
-                <>
-                  <NavLink
-                    to="/profile?t=login"
-                    className={({ isActive }) => (isActive ? 'active' : undefined)}
-                  >
-                    Se connecter
-                  </NavLink>
-                  <NavLink
-                    to="/profile?t=register"
-                    className={({ isActive }) => (isActive ? 'active' : undefined)}
-                  >
-                    S’inscrire
-                  </NavLink>
-                </>
+                <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                  Se connecter / S’inscrire
+                </NavLink>
               )}
             </nav>
           </div>
         </div>
 
-        {/* Menu mobile déroulant */}
+        {/* Menu mobile */}
         <div className={`mobile-menu${open ? ' open' : ''}`}>
           <nav className="nav">
             {MAIN_LINKS.map(([to, label]) => (
@@ -97,14 +80,9 @@ export default function App() {
                 {user.name || user.email}
               </NavLink>
             ) : (
-              <>
-                <NavLink to="/profile?t=login" onClick={closeMobile}>
-                  Se connecter
-                </NavLink>
-                <NavLink to="/profile?t=register" onClick={closeMobile}>
-                  S’inscrire
-                </NavLink>
-              </>
+              <NavLink to="/profile" onClick={closeMobile}>
+                Se connecter / S’inscrire
+              </NavLink>
             )}
           </nav>
         </div>
