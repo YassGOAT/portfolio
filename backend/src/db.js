@@ -20,5 +20,5 @@ export const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   namedPlaceholders: true,
-  ssl: { rejectUnauthorized: true }
+  ssl: { ca: fs.readFileSync(caCertPath, 'utf8') }
 });
