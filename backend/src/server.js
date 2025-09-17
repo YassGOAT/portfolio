@@ -18,25 +18,31 @@ import contactRoutes from './routes/contact.routes.js'
 const app = express()
 app.set('pool', pool)
 
-// CORS
-const allowOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173'
-app.use(cors({ origin: allowOrigin, credentials: true }))
+// CORS : autorise Netlify + localhost (dev)
+const allowed = [
+  process.env.CORS_ORIGIN,              // ex: https://portfoliohamriyassine.netlify.app
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+].filter(Boolean);
 
-// Body parsers
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || allowed.some(a => (a && origin.startsWith(a)) || (a && new RegExp(a).test?.(origin)))) {
+      return cb(null, true);
+    }
+    return cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+
 app.use(express.json({ limit: '2mb' }))
 app.use(express.urlencoded({ extended: true }))
 
-/* ===========================
-   Static files (uploads)
-   👉 On sert maintenant backend/src/uploads/*
-   =========================== */
+// Static uploads
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
-const uploadsRoot = path.join(__dirname, 'uploads')            // <-- src/uploads
+const uploadsRoot = path.join(__dirname, 'uploads')
 fs.mkdirSync(path.join(uploadsRoot, 'cv'), { recursive: true })
-
-// Très important : avant les routes et le 404
 app.use('/uploads', express.static(uploadsRoot))
 
 // Health & root
@@ -58,7 +64,7 @@ app.get('/', (_req, res) => {
 })
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 
-// API routes
+// Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/cvs', cvsRoutes)
 app.use('/api/presentations', presentationsRoutes)
