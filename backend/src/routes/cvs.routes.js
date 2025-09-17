@@ -18,11 +18,7 @@ function publicFilePath(filename) {
   return `/uploads/cv/${filename}`
 }
 
-/**
- * Supprime les doublons : on garde le fichier `keep` et
- * on supprime tous les autres PDF qui ont le même "base name"
- * (nom d’origine normalisé, sans timestamp et sans .pdf).
- */
+/** Supprime tous les doublons (même basenane sans timestamp) sauf le fichier à conserver */
 function cleanupDuplicates(keepFilename) {
   const base = keepFilename.replace(/^\d+-/, '').replace(/\.pdf$/i, '')
   const files = fs.readdirSync(uploadsDir)
@@ -34,6 +30,16 @@ function cleanupDuplicates(keepFilename) {
       try { fs.unlinkSync(path.join(uploadsDir, f)) } catch {}
     }
   }
+}
+
+/** Supprime un fichier sur disque à partir de son file_url (/uploads/cv/xxx.pdf) */
+function safeUnlinkByFileUrl(file_url) {
+  try {
+    if (!file_url) return
+    const filename = path.basename(file_url) // xxx.pdf
+    const full = path.join(uploadsDir, filename)
+    if (fs.existsSync(full)) fs.unlinkSync(full)
+  } catch {}
 }
 
 /** GET /api/cvs?active=1 (public) */
@@ -87,7 +93,7 @@ router.post(
         await pool.query(`UPDATE cvs SET is_active = 0 WHERE id_user = ?`, [id_user])
       }
 
-      // nettoie les doublons (même base name)
+      // Nettoie les doublons (même base name) et garde le nouveau
       cleanupDuplicates(req.file.filename)
 
       const file_url = publicFilePath(req.file.filename)
@@ -117,8 +123,9 @@ router.put(
       if (!Number.isFinite(id_cv)) return res.status(400).json({ error: 'Invalid id' })
 
       const id_user = req.user.id_user
-      const [exist] = await pool.query(`SELECT * FROM cvs WHERE id_cv = ? AND id_user = ?`, [id_cv, id_user])
-      if (!exist.length) return res.status(404).json({ error: 'CV not found' })
+      const [existRows] = await pool.query(`SELECT * FROM cvs WHERE id_cv = ? AND id_user = ?`, [id_cv, id_user])
+      if (!existRows.length) return res.status(404).json({ error: 'CV not found' })
+      const existing = existRows[0]
 
       const { label, locale } = req.body || {}
       const is_active_raw = req.body?.is_active
@@ -127,9 +134,19 @@ router.put(
 
       let newFileUrl = null
       if (req.file) {
-        // nettoie les doublons (même base name)
+        // Nettoie les doublons (même base name)
         cleanupDuplicates(req.file.filename)
         newFileUrl = publicFilePath(req.file.filename)
+
+        // Supprime l'ancien fichier sur disque s'il n'est plus référencé ailleurs
+        const oldFileUrl = existing.file_url
+        if (oldFileUrl && oldFileUrl !== newFileUrl) {
+          const [cnt] = await pool.query(
+            'SELECT COUNT(*) AS n FROM cvs WHERE file_url = ? AND id_cv <> ?',
+            [oldFileUrl, id_cv]
+          )
+          if ((cnt[0]?.n ?? 0) === 0) safeUnlinkByFileUrl(oldFileUrl)
+        }
       }
 
       if (is_active === 1) {
@@ -154,15 +171,27 @@ router.put(
   }
 )
 
-/** DELETE /api/cvs/:id (admin) — supprime UNIQUEMENT la ligne en BDD (pas le fichier) */
+/** DELETE /api/cvs/:id (admin) — supprime la ligne ET le fichier si non référencé ailleurs */
 router.delete('/:id', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const id_cv = Number(req.params.id)
     if (!Number.isFinite(id_cv)) return res.status(400).json({ error: 'Invalid id' })
 
     const id_user = req.user.id_user
-    const [exist] = await pool.query(`SELECT * FROM cvs WHERE id_cv = ? AND id_user = ?`, [id_cv, id_user])
-    if (!exist.length) return res.status(404).json({ error: 'CV not found' })
+    const [existRows] = await pool.query(`SELECT * FROM cvs WHERE id_cv = ? AND id_user = ?`, [id_cv, id_user])
+    if (!existRows.length) return res.status(404).json({ error: 'CV not found' })
+    const existing = existRows[0]
+
+    // Si le fichier n'est pas utilisé par un autre CV, on le supprime du disque
+    if (existing.file_url) {
+      const [cnt] = await pool.query(
+        'SELECT COUNT(*) AS n FROM cvs WHERE file_url = ? AND id_cv <> ?',
+        [existing.file_url, id_cv]
+      )
+      if ((cnt[0]?.n ?? 0) === 0) {
+        safeUnlinkByFileUrl(existing.file_url)
+      }
+    }
 
     await pool.query(`DELETE FROM cvs WHERE id_cv = ?`, [id_cv])
     res.json({ deleted: true })
