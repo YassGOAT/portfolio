@@ -1,6 +1,12 @@
 import 'dotenv/config';
 import mysql from 'mysql2/promise';
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const caCertPath = path.join(__dirname, 'ca.pem'); // <— défini !
+
 
 const required = ['MYSQL_HOST','MYSQL_PORT','MYSQL_USER','MYSQL_PASSWORD','MYSQL_DB'];
 const missing = required.filter(k => !process.env[k]);
