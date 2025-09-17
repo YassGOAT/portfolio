@@ -1,18 +1,10 @@
 import 'dotenv/config';
 import mysql from 'mysql2/promise';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const caCertPath = path.join(__dirname, 'ca.pem'); // <— défini !
-
 
 const required = ['MYSQL_HOST','MYSQL_PORT','MYSQL_USER','MYSQL_PASSWORD','MYSQL_DB'];
 const missing = required.filter(k => !process.env[k]);
 if (missing.length) {
   console.error('❌ Missing DB env vars:', missing.join(', '));
-  // On évite de lancer avec un host/port implicite (localhost:3306)
   throw new Error('Database environment not fully configured');
 }
 
@@ -27,5 +19,7 @@ export const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   namedPlaceholders: true,
-  ssl: { ca: fs.readFileSync(caCertPath, 'utf8') }
+  ssl: process.env.MYSQL_CA
+    ? { ca: process.env.MYSQL_CA }         // ✅ on lit le CA depuis l’ENV
+    : { rejectUnauthorized: true }         // fallback (marche chez certains providers)
 });
