@@ -1,17 +1,4 @@
-version: "3.9"
 services:
-  db:
-    image: mysql:8
-    container_name: db
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: portfolio
-    ports:
-      - "3307:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: phpmyadmin
@@ -19,12 +6,8 @@ services:
     ports:
       - "8080:80"
     environment:
-      PMA_ARBITRARY: 1   # permet de saisir un hôte manuellement
+      PMA_HOST: portfoliohamriyassine-portfoliohamriyassine.d.aivencloud.com
+      PMA_PORT: 28606
     volumes:
-      # fichier config phpMyAdmin pour SSL Aiven
       - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
-      # ton certificat CA Aiven
       - ./certs/ca.pem:/etc/phpmyadmin/certs/ca.pem:ro
-
-volumes:
-  db_data:
