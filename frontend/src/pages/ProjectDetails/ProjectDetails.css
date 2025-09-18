@@ -2,13 +2,15 @@
 .project-details .cover { width:100%; border-radius:14px; margin: 0 0 14px; max-height: 420px; object-fit: cover; }
 .project-details .lead { color:#374151; margin: 0 0 12px; }
 .project-details .rich p { line-height:1.7; margin: 0 0 12px; }
+
 .section-title { font-weight:600; margin: 16px 0 10px; }
 .chiplist { display:flex; gap:8px; flex-wrap:wrap; list-style:none; margin:0; padding:0; }
 .chip { padding:6px 10px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px; font-size:.9rem; }
+
 .gallery-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:10px; }
 .gallery-grid img { width:100%; border-radius:12px; }
 @media (max-width: 640px){ .gallery-grid { grid-template-columns: 1fr; } }
+
 .project-links a { display:inline-block; margin-right:12px; color:#2563eb; text-decoration:none; }
 .project-links a:hover { text-decoration:underline; }
-
-@media (max-width: 640px){ .gallery-grid { grid-template-columns: 1fr; } }
+.project-links .icon { vertical-align:middle; margin-right:4px; font-size:1.1rem; }

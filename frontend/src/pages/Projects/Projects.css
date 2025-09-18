@@ -5,5 +5,8 @@
 .project-desc { margin:0; color:#374151; font-size:.95rem; }
 .project-meta { display:flex; gap:10px; margin-top:10px; }
 .project-meta a { font-size:.9rem; color:#2563eb; }
-
-/* rien d'autre: la grille se replie via .grid-cols-3 dans index.css */
+.project-meta a:hover { text-decoration:underline; }
+.project-meta .icon { vertical-align:middle; margin-right:4px; font-size:1.1rem; }
+@media (min-width: 600px){
+  .project-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}

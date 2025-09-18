@@ -13,7 +13,8 @@ body {
 .container { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 
 /* Cartes, boutons, inputs */
-.card { background:#fff; border:1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.card { background:#fff; border:1px solid #e5e7eb; border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04); transition: box-shadow .2s; }
+.card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.06); }
 .btn { display:inline-block; padding:10px 14px; border-radius:10px; background:#111827; color:#fff; text-decoration:none; border:0; cursor:pointer; }
 .btn:disabled { opacity:.6; cursor:not-allowed; }
 .btn-light { background:#f3f4f6; color:#111827; }
@@ -21,6 +22,7 @@ body {
 .input, .textarea, select {
   width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font:inherit;
 }
+.input:focus, .textarea:focus, select:focus { outline:none; border-color:#2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
 .textarea { min-height: 130px; resize: vertical; }
 
 .text-sm { font-size:.9rem; color:#6b7280; }
@@ -31,11 +33,18 @@ body {
 .site-header__bar { height:56px; display:flex; align-items:center; justify-content:space-between; }
 .nav-group { display:flex; align-items:center; gap:16px; }
 .nav { display:flex; gap:16px; flex-wrap:wrap; }
-.nav a { color:#374151; text-decoration:none; }
+.nav a { color:#374151; text-decoration:none; transition: color .15s ease; }
 .nav a:hover { color:#2563eb; }
-.nav .active { color:#2563eb; font-weight:600; }
+.nav .active { color:#2563eb; font-weight:700; }
 
-/* Bouton burger */
+/* Brand */
+.brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:#111827; }
+.brand:hover { opacity:.9; }
+.brand-dot { width:10px; height:10px; border-radius:999px; background: linear-gradient(135deg, #2563eb, #7c3aed); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+.brand-name { font-weight:700; letter-spacing: .2px; }
+.brand-accent { color:#2563eb; margin-left:4px; }
+
+/* Bouton burger + menu mobile */
 .mobile-toggle { display:none; width:40px; height:40px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; align-items:center; justify-content:center; gap:4px; }
 .mobile-toggle span { width:18px; height:2px; background:#111827; display:block; }
 .mobile-menu { display:none; }
@@ -45,14 +54,13 @@ body {
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
 .grid-cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
 
-/* Breakpoints */
 @media (max-width: 900px){
   .grid-cols-3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 @media (max-width: 720px){
   /* NAV: mobile */
   .mobile-toggle { display:inline-flex; }
-  .nav-group { display:none; }           /* cache la nav desktop */
+  .nav-group { display:none; }
   .mobile-menu {
     display:none; position:absolute; top:56px; left:0; right:0;
     background:#fff; border-bottom:1px solid #e5e7eb; padding:12px 16px;
@@ -64,30 +72,13 @@ body {
   .grid-cols-2, .grid-cols-3 { grid-template-columns: 1fr; }
 }
 
-/* Petits helpers marges */
+/* Titres de pages */
+.page-title { margin:0 0 16px; font-size: clamp(26px, 3.5vw, 40px); line-height:1.15; }
+
+/* Helpers marges/paddings */
 .m-0 { margin:0; } .mb-2 { margin-bottom:8px; } .mb-3 { margin-bottom:12px; } .mb-4 { margin-bottom:16px; } .mt-6 { margin-top:24px; }
 .mt-8 { margin-top:32px; } .mt-10 { margin-top:40px; } .mt-12 { margin-top:48px; }
 .mb-6 { margin-bottom:24px; } .mb-8 { margin-bottom:32px; } .mb-10 { margin-bottom:40px; } .mb-12 { margin-bottom:48px; }
 .p-0 { padding:0; } .pb-2 { padding-bottom:8px; } .pb-3 { padding-bottom:12px; } .pb-4 { padding-bottom:16px; }
 .pb-6 { padding-bottom:24px; } .pb-8 { padding-bottom:32px; } .pb-10 { padding-bottom:40px; } .pb-12 { padding-bottom:48px; }
-
-/* --- Brand / Logo texte --- */
-.brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:#111827; }
-.brand:hover { opacity:.9; }
-.brand-dot {
-  width:10px; height:10px; border-radius:999px;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-}
-.brand-name { font-weight:700; letter-spacing: .2px; }
-.brand-accent { color:#2563eb; margin-left:4px; }
-
-/* Titres de pages */
-.page-title { margin:0 0 16px; font-size: clamp(26px, 3.5vw, 40px); line-height:1.15; }
-
-/* Hover léger sur les liens du header */
-.nav a { transition: color .15s ease; }
-
-/* Optionnel : mettre l’élément actif un peu plus visible */
-.nav .active { color:#2563eb; font-weight:700; }
-.nav .active:hover { color:#1e40af; }
+.py-4 { padding-top:16px; padding-bottom:16px; }

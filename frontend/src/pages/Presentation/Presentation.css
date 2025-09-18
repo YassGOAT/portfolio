@@ -1,5 +1,8 @@
 .presentation .title { font-size: 1.5rem; font-weight: 700; margin: 0 0 12px; }
-.presentation .content p { margin: 0 0 12px; line-height: 1.6; }
+.presentation .content p { margin: 0 0 12px; line-height: 1.7; }
 .presentation .muted { color:#6b7280; }
 .presentation .links a { color:#2563eb; text-decoration:none; }
 .presentation .links a:hover { text-decoration:underline; }
+.presentation .section { margin-bottom: 32px; }
+.presentation .section h2 { font-size:1.25rem; font-weight:600; margin:0 0 16px; }
+.presentation .skills { display:flex; flex-wrap:wrap; gap:10px; }

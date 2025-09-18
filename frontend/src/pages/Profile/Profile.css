@@ -7,6 +7,4 @@
 .choose .row { justify-content:center; margin-top:12px; }
 .confirm { display:flex; align-items:center; gap:12px; flex-wrap: wrap; }
 .confirm .btn { flex:1; min-width: 120px; }
-@media (max-width: 480px){
-  .confirm { flex-direction: column; align-items: stretch; }
-}
+@media (max-width: 480px){ .confirm { flex-direction: column; align-items: stretch; } }

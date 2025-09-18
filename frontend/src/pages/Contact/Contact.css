@@ -1,8 +1,11 @@
 .contact-form { max-width: 640px; margin: 0 auto; display:grid; gap:12px; }
 .form-title { font-size:1.2rem; font-weight:700; margin:0 0 4px; }
-.status-ok { color:#059669; font-size:.9rem; margin-top:6px; }
-.status-err { color:#dc2626; font-size:.9rem; margin-top:6px; }
 .form-group { display:flex; flex-direction:column; }
 .form-group label { margin-bottom:4px; font-weight:600; }
 .form-group input, .form-group textarea { padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font:inherit; }
-.form-group textarea { resize:vertical; }
+.form-group input:focus, .form-group textarea:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+.form-group textarea { resize:vertical; min-height: 130px; }
+.status-ok { color:#059669; font-size:.9rem; margin-top:6px; }
+.status-err { color:#dc2626; font-size:.9rem; margin-top:6px; }
+.form-actions { margin-top:12px; }
+.form-actions .btn { min-width: 120px; }
