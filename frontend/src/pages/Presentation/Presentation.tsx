@@ -1,34 +1,36 @@
 import { useEffect, useState } from "react";
-import { api } from "../../services/api";
+import * as api from "../../services/api";
+import "./Presentation.css";
 
-type Pres = { id_presentation: number; locale: string; headline?: string | null; content_md?: string | null };
+type Pres = api.Pres;
 
 export default function Presentation() {
   const [data, setData] = useState<Pres | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  // adapte si tu veux lire une autre locale (en, fr…)
-  const locale = "fr";
-
   useEffect(() => {
-    api.presentation(locale)
+    const locale = "fr";
+    api
+      .presentation(locale)
       .then(setData)
-      .catch(e => setErr(e?.message || "Erreur de chargement"))
+      .catch((e) => setErr(e?.message || "Erreur de chargement"))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Chargement…</p>;
-  if (err) return <p style={{ color: "crimson" }}>{err}</p>;
+  if (loading) return null;
+  if (err) return <p className="error">{err}</p>;
 
   return (
-    <div style={{ maxWidth: 860, margin: "0 auto", padding: 16 }}>
-      <h1>{data?.headline || "Présentation"}</h1>
-      {data?.content_md ? (
-        <pre style={{ whiteSpace: "pre-wrap", font: "inherit" }}>{data.content_md}</pre>
-      ) : (
-        <p>Aucune présentation pour le moment.</p>
-      )}
-    </div>
+    <section className="page">
+      <h1 className="title">{data?.headline || "Bienvenue sur mon portfolio 🚀"}</h1>
+      <div className="content">
+        {data?.content_md ? (
+          <div dangerouslySetInnerHTML={{ __html: api.mdToHtml(data.content_md) }} />
+        ) : (
+          <p className="muted">Aucune présentation disponible pour l’instant.</p>
+        )}
+      </div>
+    </section>
   );
 }

@@ -1,5 +1,6 @@
+import "./Certifications.css";
+import api from "../../services/api";
 import { useEffect, useState } from "react";
-import { api } from "../../services/api";
 
 type Cert = {
   id_certification: number;
@@ -16,33 +17,40 @@ export default function Certifications() {
 
   useEffect(() => {
     api.certifications()
-      .then(setItems)
-      .catch(e => setErr(e?.message || "Erreur de chargement"))
+      .then((rows) => setItems(Array.isArray(rows) ? rows : []))
+      .catch((e) => setErr(e?.message || "Erreur de chargement"))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Chargement des certifications…</p>;
-  if (err) return <p style={{ color: "crimson" }}>{err}</p>;
+  if (loading) return <p>Chargement…</p>;
+  if (err) return <p style={{ color: "#dc2626" }}>{err}</p>;
 
   return (
-    <div style={{ maxWidth: 860, margin: "0 auto", padding: 16 }}>
-      <h1>Certifications</h1>
-      {items.length === 0 ? <p>Aucune certification.</p> : (
-        <ul style={{ padding: 0 }}>
-          {items.map(c => (
-            <li key={c.id_certification} style={{ listStyle: "none", border: "1px solid #e5e7eb", borderRadius: 12, padding: 12, marginBottom: 12 }}>
-              <strong>{c.title}</strong>
-              {c.issuer && <> • {c.issuer}</>}
-              {c.issue_date && <> — {new Date(c.issue_date).toLocaleDateString()}</>}
-              {c.credential_url && (
-                <>
-                  {" "}- <a href={c.credential_url} target="_blank" rel="noreferrer">Voir la certification</a>
-                </>
+    <>
+      <h1 className="page-title">Certifications</h1>
+      {!items.length ? (
+        <p>Aucune certification pour le moment.</p>
+      ) : (
+        <div className="cert-list">
+          {items.map((c) => (
+            <article key={c.id_certification} className="cert">
+              <h3 className="cert-title">{c.title}</h3>
+              {(c.issuer || c.issue_date) && (
+                <p className="cert-sub">
+                  {c.issuer && <span>{c.issuer}</span>}
+                  {c.issuer && c.issue_date && " • "}
+                  {c.issue_date && <span>{new Date(c.issue_date).toLocaleDateString()}</span>}
+                </p>
               )}
-            </li>
+              {c.credential_url && (
+                <div className="cert-actions">
+                  <a href={c.credential_url} target="_blank">Voir le certificat</a>
+                </div>
+              )}
+            </article>
           ))}
-        </ul>
+        </div>
       )}
-    </div>
+    </>
   );
 }

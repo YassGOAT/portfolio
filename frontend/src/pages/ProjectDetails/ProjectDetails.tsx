@@ -1,75 +1,98 @@
+// src/pages/ProjectDetails/ProjectDetails.tsx
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { api } from "../../services/api";
+import * as api from "../../services/api";
+import "./ProjectDetails.css";
 
-type ProjectDetail = {
-  id_project: number;
-  title: string;
-  slug: string;
+/** Type détaillé pour cette page (étend le type de base) */
+type ProjectDetail = api.Project & {
   long_desc?: string | null;
-  cover_url?: string | null;
-  github_url?: string | null;
-  demo_url?: string | null;
-  images?: Array<{ id_image: number; image_url: string; alt_text?: string | null }>;
-  skills?: Array<{ id_skill: number; name: string; category?: string | null; level?: number | null }>;
+  images?: { id_image: number; image_url: string; alt_text?: string | null }[];
+  skills?: { id_skill: number; name: string; category?: string | null; level?: number | null }[];
 };
 
 export default function ProjectDetails() {
-  const { slug = "" } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const [data, setData] = useState<ProjectDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!slug) return;
-    api.projectBySlug(slug)
-      .then(setData)
-      .catch(e => setErr(e?.message || "Projet introuvable"))
+    if (!slug) {
+      setErr("Projet introuvable");
+      setLoading(false);
+      return;
+    }
+    api
+      .projectBySlug(slug)
+      .then((p) => setData(p as ProjectDetail)) // l’API renvoie au moins ces champs
+      .catch((e) => setErr(e?.message || "Erreur de chargement"))
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (!slug) return <p>Slug manquant.</p>;
-  if (loading) return <p>Chargement…</p>;
-  if (err) return <p style={{ color: "crimson" }}>{err}</p>;
+  if (loading) return null;
+  if (err) return <p className="error">{err}</p>;
   if (!data) return <p>Projet introuvable.</p>;
 
   return (
-    <div style={{ maxWidth: 960, margin: "0 auto", padding: 16 }}>
-      <Link to="/projects">← Retour</Link>
-      <h1>{data.title}</h1>
+    <article className="project-details">
+      <Link to="/projects" className="btn btn-light mb-4">
+        ← Retour
+      </Link>
+
+      <h1 className="title">{data.title}</h1>
 
       {data.cover_url && (
-        <img src={data.cover_url} alt={data.title} style={{ width: "100%", borderRadius: 12, margin: "12px 0" }} />
+        <img className="cover" src={data.cover_url} alt={data.title} />
       )}
 
-      {data.long_desc && <p style={{ whiteSpace: "pre-line" }}>{data.long_desc}</p>}
+      {data.long_desc && <p className="lead">{data.long_desc}</p>}
 
-      {(data.github_url || data.demo_url) && (
-        <p style={{ marginTop: 12 }}>
-          {data.github_url && <a href={data.github_url} target="_blank" rel="noreferrer">GitHub</a>}{" "}
-          {data.demo_url && <> • <a href={data.demo_url} target="_blank" rel="noreferrer">Demo</a></>}
-        </p>
-      )}
-
-      {data.skills && data.skills.length > 0 && (
+      {/* IMAGES */}
+      {data.images?.length ? (
         <>
-          <h3>Compétences</h3>
-          <ul>
-            {data.skills.map(s => <li key={s.id_skill}>{s.name}</li>)}
-          </ul>
-        </>
-      )}
-
-      {data.images && data.images.length > 0 && (
-        <>
-          <h3>Galerie</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px,1fr))", gap: 12 }}>
-            {data.images.map(img => (
-              <img key={img.id_image} src={img.image_url} alt={img.alt_text || ""} style={{ width: "100%", borderRadius: 8 }} />
+          <h3 className="section-title">Images</h3>
+          <div className="gallery-grid">
+            {data.images.map((img) => (
+              <img
+                key={img.id_image}
+                src={img.image_url}
+                alt={img.alt_text || data.title}
+              />
             ))}
           </div>
         </>
+      ) : null}
+
+      {/* COMPÉTENCES */}
+      {data.skills?.length ? (
+        <>
+          <h3 className="section-title">Compétences</h3>
+          <ul className="chiplist">
+            {data.skills.map((s) => (
+              <li className="chip" key={s.id_skill}>
+                {s.name}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+
+      {/* Liens externes */}
+      {(data.github_url || data.demo_url) && (
+        <div className="project-links">
+          {data.github_url && (
+            <a href={data.github_url} target="_blank" rel="noopener">
+              Code
+            </a>
+          )}
+          {data.demo_url && (
+            <a href={data.demo_url} target="_blank" rel="noopener">
+              Démo
+            </a>
+          )}
+        </div>
       )}
-    </div>
+    </article>
   );
 }

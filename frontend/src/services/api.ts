@@ -1,16 +1,19 @@
 // src/services/api.ts
-const API_URL = import.meta.env.VITE_API_URL;
+/* ===== Types partagés ===== */
+export type Me = {
+  id_user: number;
+  name: string;
+  email: string;
+};
 
-/* ---------- Types shared across pages ---------- */
 export type Cv = {
   id_cv: number;
-  id_user: number;
-  label: string | null;
   locale: string;
   file_url: string;
   is_active: 0 | 1;
-  created_at: string;
-  updated_at: string;
+  is_public: 0 | 1;
+  created_at?: string | null;
+  updated_at?: string | null;
 };
 
 export type Project = {
@@ -19,23 +22,25 @@ export type Project = {
   slug: string;
   short_desc?: string | null;
   cover_url?: string | null;
-  is_featured: 0 | 1;
-  created_at: string;
-};
-
-export type ProjectDetail = {
-  id_project: number;
-  title: string;
-  slug: string;
-  long_desc?: string | null;
-  cover_url?: string | null;
+  created_at?: string | null;
+  // champs utilisés dans Projects.tsx :
   github_url?: string | null;
   demo_url?: string | null;
-  images?: Array<{ id_image: number; image_url: string; alt_text?: string | null }>;
-  skills?: Array<{ id_skill: number; name: string; category?: string | null; level?: number | null }>;
 };
 
-export type Skill = { id_skill: number; name: string; category?: string | null; level?: number | null };
+export type Pres = {
+  id_presentation: number;
+  locale: string;
+  headline?: string | null;
+  content_md?: string | null;
+};
+
+export type Skill = {
+  id_skill: number;
+  name: string;
+  category?: string | null;
+  level?: number | null;
+};
 
 export type Cert = {
   id_certification: number;
@@ -45,100 +50,122 @@ export type Cert = {
   credential_url?: string | null;
 };
 
-export type Presentation = {
-  id_presentation: number;
-  locale: string;
-  headline?: string | null;
-  content_md?: string | null;
-};
-
-export type Me = {
-  id_user: number;
+export type ContactPayload = {
   name: string;
   email: string;
-  role: "admin" | "visitor";
-  bio?: string | null;
-  photo_url?: string | null;
-  linkedin_url?: string | null;
-  github_url?: string | null;
-  other_links?: any;
+  subject: string;
+  message: string;
 };
 
-/* ---------- Tiny helpers ---------- */
-async function get<T>(path: string): Promise<T> {
-  const r = await fetch(`${API_URL}${path}`, { credentials: "include" });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
+const BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "";
+
+/* ===== util ===== */
+async function json<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    ...init,
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => "");
+    throw new Error(txt || `HTTP ${res.status}`);
+  }
+  return (await res.json()) as T;
 }
-async function post<T>(path: string, body: any, opts: RequestInit = {}): Promise<T> {
-  const r = await fetch(`${API_URL}${path}`, {
+
+/* ===== Auth / session ===== */
+export async function me(): Promise<Me | null> {
+  // l’API renvoie { user: ... } ou { error: ... }
+  const data = await json<{ user?: Me } | { error: string }>("/api/me");
+  // @ts-ignore
+  return (data as any).user ?? null;
+}
+
+export async function login(payload: {
+  email: string;
+  password: string;
+}): Promise<Me> {
+  const data = await json<{ user: Me }>("/api/auth/login", {
     method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
-    body: JSON.stringify(body),
-    ...opts,
+    body: JSON.stringify(payload),
   });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
+  return data.user;
 }
-async function put<T>(path: string, body: any, opts: RequestInit = {}): Promise<T> {
-  const r = await fetch(`${API_URL}${path}`, {
+
+export async function register(payload: {
+  name: string;
+  email: string;
+  password: string;
+}): Promise<Me> {
+  const data = await json<{ user: Me }>("/api/auth/register", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.user;
+}
+
+export async function updateProfile(payload: {
+  name?: string;
+  email?: string;
+  password?: string;
+}): Promise<Me> {
+  const data = await json<{ user: Me }>("/api/profile", {
     method: "PUT",
-    credentials: "include",
-    headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
-    body: JSON.stringify(body),
-    ...opts,
+    body: JSON.stringify(payload),
   });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-async function del<T>(path: string): Promise<T> {
-  const r = await fetch(`${API_URL}${path}`, { method: "DELETE", credentials: "include" });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
+  return data.user;
 }
 
-/* ---------- API surface (typed) ---------- */
-export const api = {
-  // Auth / profile
-  me: () => get<{ user: Me }>("/api/auth/me"),
-  login: (email: string, password: string) => post("/api/auth/login", { email, password }),
-  register: (name: string, email: string, password: string) =>
-    post("/api/auth/register", { name, email, password }),
-  logout: () => del("/api/auth/logout"),
-  updateProfile: (payload: Partial<Me>) => put("/api/users/me", payload),
+/* ===== Ressources ===== */
+export const cvs = (): Promise<Cv[]> => json<Cv[]>("/api/cvs");
 
-  // CVs
-  cvs: () => get<Cv[]>("/api/cvs"),
-  createCv: (form: FormData) =>
-    fetch(`${API_URL}/api/cvs`, { method: "POST", body: form, credentials: "include" }).then(async (r) => {
-      if (!r.ok) throw new Error(await r.text());
-      return r.json();
-    }),
-  updateCv: (id: number, form: FormData) =>
-    fetch(`${API_URL}/api/cvs/${id}`, { method: "PUT", body: form, credentials: "include" }).then(async (r) => {
-      if (!r.ok) throw new Error(await r.text());
-      return r.json();
-    }),
-  deleteCv: (id: number) => del(`/api/cvs/${id}`),
-  setActiveCv: (id: number) => post(`/api/cvs/${id}/activate`, {}),
+export const projects = (): Promise<Project[]> =>
+  json<Project[]>("/api/projects");
 
-  // Projects
-  projects: () => get<Project[]>("/api/projects"),
-  projectBySlug: (slug: string) => get<ProjectDetail>(`/api/projects/${slug}`),
+export const projectBySlug = (slug: string): Promise<Project> =>
+  json<Project>(`/api/projects/${encodeURIComponent(slug)}`);
 
-  // Skills
-  skills: () => get<Skill[]>("/api/skills"),
+export const presentation = (locale = "fr"): Promise<Pres> =>
+  json<Pres>(`/api/presentation?locale=${encodeURIComponent(locale)}`);
 
-  // Certifications
-  certifications: () => get<Cert[]>("/api/certifications"),
+export const skills = (): Promise<Skill[]> => json<Skill[]>("/api/skills");
+export const certifications = (): Promise<Cert[]> =>
+  json<Cert[]>("/api/certifications");
 
-  // Presentations
-  presentation: (locale = "fr") => get<Presentation>(`/api/presentations?locale=${locale}`),
+export const sendContact = (payload: ContactPayload): Promise<{ ok: true }> =>
+  json<{ ok: true }>("/api/contact", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 
-  // Contact (include subject)
-  sendContact: (data: { name: string; email: string; subject?: string; message: string }) =>
-    post("/api/contacts", data),
+/* ===== Petit helper Markdown -> HTML (léger) =====
+   suffisant pour du texte simple (titres, gras, italique, liens, lignes).
+*/
+export function mdToHtml(md?: string | null): string {
+  if (!md) return "";
+  let html = md;
+  html = html.replace(/^### (.*)$/gm, "<h3>$1</h3>");
+  html = html.replace(/^## (.*)$/gm, "<h2>$1</h2>");
+  html = html.replace(/^# (.*)$/gm, "<h1>$1</h1>");
+  html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
+  html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, `<a href="$2" target="_blank" rel="noopener">$1</a>`);
+  html = html.replace(/\n{2,}/g, "</p><p>");
+  html = `<p>${html}</p>`;
+  return html;
+}
+
+export default {
+  me,
+  login,
+  register,
+  updateProfile,
+  cvs,
+  projects,
+  projectBySlug,
+  presentation,
+  skills,
+  certifications,
+  sendContact,
+  mdToHtml,
 };
-
-export default api; // <- if you prefer default import
