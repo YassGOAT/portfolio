@@ -1,33 +1,35 @@
-import './Skills.css'
-import { useSkills } from '../../hooks/usePortfolio'
-import type { Skill } from '../../types'
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
+
+type Skill = { id_skill: number; name: string; category?: string | null; level?: number | null };
 
 export default function Skills() {
-  const { data, isLoading, error } = useSkills()
-  if (isLoading) return <p>Chargement…</p>
-  if (error) return <p>Erreur de chargement.</p>
+  const [items, setItems] = useState<Skill[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
 
-  const groups = (data ?? []).reduce<Record<string, Skill[]>>((acc, s) => {
-    const key = s.category || 'Autres'
-    ;(acc[key] ||= []).push(s)
-    return acc
-  }, {})
+  useEffect(() => {
+    api.skills()
+      .then(setItems)
+      .catch(e => setErr(e?.message || "Erreur de chargement"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p>Chargement des compétences…</p>;
+  if (err) return <p style={{ color: "crimson" }}>{err}</p>;
 
   return (
-    <div className="grid grid-cols-2 gap-24">
-      {Object.entries(groups).map(([cat, items]) => (
-        <section key={cat} className="card">
-          <h2 className="block-title">{cat}</h2>
-          <ul className="skills">
-            {items.map((s) => (
-              <li key={s.id_skill} className="skill">
-                <span>{s.name}</span>
-                {s.level != null && <span className="level">{s.level}%</span>}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+    <div style={{ maxWidth: 800, margin: "0 auto", padding: 16 }}>
+      <h1>Compétences</h1>
+      {items.length === 0 ? <p>Aucune compétence.</p> : (
+        <ul>
+          {items.map(s => (
+            <li key={s.id_skill}>
+              {s.name} {s.category ? `• ${s.category}` : ""} {s.level != null ? `• niveau ${s.level}` : ""}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
-  )
+  );
 }

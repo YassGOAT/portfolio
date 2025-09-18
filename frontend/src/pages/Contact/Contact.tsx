@@ -1,68 +1,51 @@
-import './Contact.css'
-import { useState, type FormEvent } from 'react'
-import axios from 'axios'
-import { useSendContact } from '../../hooks/usePortfolio'
-
-function getErrorMessage(err: unknown): string {
-  if (axios.isAxiosError(err)) {
-    const data = err.response?.data as { error?: string } | undefined
-    return data?.error ?? err.message
-  }
-  if (err instanceof Error) return err.message
-  return 'Une erreur est survenue'
-}
+import { useState } from "react";
+import { api } from "../../services/api";
 
 export default function Contact() {
-  const m = useSendContact()
-  const [name, setName] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [message, setMessage] = useState<string>('')
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [ok, setOk] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    await m.mutateAsync({ name, email, message })
-    setName(''); setEmail(''); setMessage('')
-  }
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    setOk(null);
+    setErr(null);
+    try {
+      await api.sendContact({ name, email, subject, message });
+      setOk("Message envoyé ✅");
+      setName(""); setEmail(""); setSubject(""); setMessage("");
+    } catch (e: any) {
+      setErr(e?.message || "Erreur d’envoi");
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
-    <form onSubmit={onSubmit} className="card contact-form">
-      <h1 className="form-title">Me contacter</h1>
-
-      <input
-        className="input"
-        placeholder="Nom"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        minLength={2}
-        maxLength={120}
-      />
-
-      <input
-        className="input"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        type="email"
-        maxLength={190}
-      />
-
-      <textarea
-        className="textarea"
-        placeholder="Message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        required
-        maxLength={5000}
-      />
-
-      <button className="btn" disabled={m.isPending}>
-        {m.isPending ? 'Envoi…' : 'Envoyer'}
-      </button>
-
-      {m.isSuccess && <p className="status-ok">Message envoyé ✅</p>}
-      {m.isError && <p className="status-err">Erreur : {getErrorMessage(m.error)}</p>}
-    </form>
-  )
+    <div style={{ maxWidth: 680, margin: "0 auto", padding: 16 }}>
+      <h1>Contact</h1>
+      <form onSubmit={onSubmit} style={{ display: "grid", gap: 10 }}>
+        <label>Nom
+          <input value={name} onChange={e => setName(e.target.value)} required />
+        </label>
+        <label>Email
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+        </label>
+        <label>Sujet
+          <input value={subject} onChange={e => setSubject(e.target.value)} />
+        </label>
+        <label>Message
+          <textarea value={message} onChange={e => setMessage(e.target.value)} required rows={6} />
+        </label>
+        <button type="submit" disabled={sending}>{sending ? "Envoi…" : "Envoyer"}</button>
+        {ok && <p style={{ color: "green" }}>{ok}</p>}
+        {err && <p style={{ color: "crimson" }}>{err}</p>}
+      </form>
+    </div>
+  );
 }

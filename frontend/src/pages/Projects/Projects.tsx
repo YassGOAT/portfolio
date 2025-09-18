@@ -1,58 +1,51 @@
-import './Projects.css'
-import { useState } from 'react'
-import { useProjects } from '../../hooks/usePortfolio'
-import { Link } from 'react-router-dom'
-import type { Project } from '../../types'
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { api } from "../../services/api";
+
+type Project = {
+  id_project: number;
+  title: string;
+  slug: string;
+  short_desc?: string | null;
+  cover_url?: string | null;
+  is_featured: 0 | 1;
+  created_at: string;
+};
 
 export default function Projects() {
-  const [page, setPage] = useState<number>(1)
-  const { data, isLoading, error } = useProjects({ page, limit: 6 })
+  const [items, setItems] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
 
-  if (isLoading) return <p>Chargement…</p>
-  if (error) return <p>Erreur de chargement.</p>
+  useEffect(() => {
+    api.projects()
+      .then(setItems)
+      .catch(e => setErr(e?.message || "Erreur de chargement"))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const totalPages = data?.totalPages ?? 1
-  const items: Project[] = data?.data ?? []
+  if (loading) return <p>Chargement des projets…</p>;
+  if (err) return <p style={{ color: "crimson" }}>{err}</p>;
 
   return (
-    <section>
-      <div className="grid grid-cols-3 gap-24">
-        {items.map((p) => (
-          <Link to={`/projects/${p.slug}`} key={p.id_project} className="card project-card">
-            {p.cover_url && <img src={p.cover_url} alt="" />}
-            <h3 className="project-title">{p.title}</h3>
-            {p.short_desc && <p className="project-desc">{p.short_desc}</p>}
-            <div className="project-meta">
-              {p.github_url && (
-                <a href={p.github_url} target="_blank" rel="noreferrer">
-                  Code
-                </a>
+    <div style={{ maxWidth: 980, margin: "0 auto", padding: 16 }}>
+      <h1>Projets</h1>
+      {items.length === 0 ? (
+        <p>Aucun projet pour le moment.</p>
+      ) : (
+        <ul style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", padding: 0 }}>
+          {items.map(p => (
+            <li key={p.id_project} style={{ listStyle: "none", border: "1px solid #e5e7eb", borderRadius: 12, padding: 12 }}>
+              {p.cover_url && (
+                <img src={p.cover_url} alt={p.title} style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8 }} />
               )}
-              {p.demo_url && (
-                <a href={p.demo_url} target="_blank" rel="noreferrer">
-                  Démo
-                </a>
-              )}
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <div className="pagination">
-        <button className="page-btn" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-          Préc.
-        </button>
-        <span>
-          {page} / {totalPages}
-        </span>
-        <button
-          className="page-btn"
-          disabled={page >= totalPages}
-          onClick={() => setPage((p) => p + 1)}
-        >
-          Suiv.
-        </button>
-      </div>
-    </section>
-  )
+              <h3 style={{ marginTop: 8 }}>{p.title}</h3>
+              {p.short_desc && <p style={{ color: "#6b7280" }}>{p.short_desc}</p>}
+              <Link to={`/projects/${p.slug}`}>Voir le projet</Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }

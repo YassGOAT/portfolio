@@ -1,102 +1,43 @@
-import { useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
-import { useMe } from './hooks/useAuth'
-import './index.css'
-
-const MAIN_LINKS: [to: string, label: string][] = [
-  ['/', 'Présentation'],
-  ['/skills', 'Compétences'],
-  ['/projects', 'Projets'],
-  ['/certifications', 'Certifications'],
-  ['/cvs', 'CV'],
-  ['/contact', 'Contact'],
-]
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import CVs from "./pages/CVs/CVs";
+import Projects from "./pages/Projects/Projects";
+import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
+import Skills from "./pages/Skills/Skills";
+import Certifications from "./pages/Certifications/Certifications";
+import Presentation from "./pages/Presentation/Presentation";
+import Profile from "./pages/Profile/Profile";
+import Contact from "./pages/Contact/Contact";
 
 export default function App() {
-  const { data: me, isLoading } = useMe()
-  const user = me?.user
-  const [open, setOpen] = useState(false)
-
-  const closeMobile = () => setOpen(false)
-
   return (
-    <div className="app">
-      <header className="site-header">
-        <div className="container site-header__bar">
-          <Link to="/" className="brand" style={{ fontWeight: 700 }}>
-            Yassine HAMRI
-          </Link>
-
-          {/* Bouton burger (mobile) */}
-          <button
-            aria-label="Ouvrir le menu"
-            className="mobile-toggle"
-            onClick={() => setOpen(v => !v)}
-          >
-            <span /><span /><span />
-          </button>
-
-          {/* Nav desktop */}
-          <div className="nav-group">
-            <nav className="nav">
-              {MAIN_LINKS.map(([to, label]) => (
-                <NavLink key={to} to={to} className={({ isActive }) => (isActive ? 'active' : undefined)}>
-                  {label}
-                </NavLink>
-              ))}
-            </nav>
-
-            <nav className="nav">
-              {isLoading ? null : user ? (
-                <NavLink
-                  to="/profile"
-                  className={({ isActive }) => (isActive ? 'active' : undefined)}
-                  title={user.email}
-                >
-                  {user.name || user.email}
-                </NavLink>
-              ) : (
-                <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-                  Se connecter / S’inscrire
-                </NavLink>
-              )}
-            </nav>
-          </div>
-        </div>
-
-        {/* Menu mobile */}
-        <div className={`mobile-menu${open ? ' open' : ''}`}>
-          <nav className="nav">
-            {MAIN_LINKS.map(([to, label]) => (
-              <NavLink key={to} to={to} onClick={closeMobile}>
-                {label}
-              </NavLink>
-            ))}
-          </nav>
-          <hr />
-          <nav className="nav">
-            {user ? (
-              <NavLink to="/profile" onClick={closeMobile} title={user.email}>
-                {user.name || user.email}
-              </NavLink>
-            ) : (
-              <NavLink to="/profile" onClick={closeMobile}>
-                Se connecter / S’inscrire
-              </NavLink>
-            )}
-          </nav>
-        </div>
+    <Router>
+      <header style={{ padding: 16, borderBottom: "1px solid #e5e7eb" }}>
+        <nav style={{ display: "flex", gap: 12 }}>
+          <Link to="/">Accueil</Link>
+          <Link to="/cvs">CVs</Link>
+          <Link to="/projects">Projets</Link>
+          <Link to="/skills">Compétences</Link>
+          <Link to="/certifications">Certifications</Link>
+          <Link to="/presentation">Présentation</Link>
+          <Link to="/profile">Profil</Link>
+          <Link to="/contact">Contact</Link>
+        </nav>
       </header>
 
-      <main className="container" style={{ padding: '32px 0' }}>
-        <Outlet />
+      <main style={{ padding: 16 }}>
+        <Routes>
+          <Route path="/" element={<h1>Bienvenue sur mon portfolio 🚀</h1>} />
+          <Route path="/cvs" element={<CVs />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:slug" element={<ProjectDetails />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/certifications" element={<Certifications />} />
+          <Route path="/presentation" element={<Presentation />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<h1>404 - Page introuvable</h1>} />
+        </Routes>
       </main>
-
-      <footer style={{ borderTop: '1px solid #e5e7eb', background: '#f3f4f6', marginTop: 40 }}>
-        <div className="container center" style={{ padding: '24px 0' }}>
-          <small className="text-sm">© {new Date().getFullYear()} Mon Nom. Tous droits réservés.</small>
-        </div>
-      </footer>
-    </div>
-  )
+    </Router>
+  );
 }
