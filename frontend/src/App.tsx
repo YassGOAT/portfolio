@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 
-import NavBar from "./pages/Navbar/Navbar"; // si tu n'as pas de composant, tu peux supprimer cette ligne
-import Footer from "./pages/Footer/Footer"; // idem – sinon garde ton footer
-
 /** PAGES */
 import Home from "./pages/Presentation/Presentation";
 import Projects from "./pages/Projects/Projects";
@@ -33,7 +30,9 @@ export default function App() {
 
   const handleLogout = async () => {
     try {
-      await api.logout?.(); // au cas où tu as un endpoint de logout
+      if (typeof api.logout === "function") {
+        await api.logout();
+      }
     } finally {
       setMe(null);
     }
@@ -43,8 +42,11 @@ export default function App() {
     <BrowserRouter>
       <header className="site-header">
         <div className="brand">
-          <Link to="/">Hamri <strong>Portfolio</strong></Link>
+          <Link to="/">
+            Hamri <strong>Portfolio</strong>
+          </Link>
         </div>
+
         <nav className="site-nav">
           <Link to="/">Accueil</Link>
           <Link to="/cvs">CVs</Link>
@@ -53,10 +55,15 @@ export default function App() {
           <Link to="/certifications">Certifications</Link>
           <Link to="/contact">Contact</Link>
 
-          {me ? (
+          {/* Espace à droite selon l'état d'auth */}
+          {loadingMe ? (
+            <span className="muted">…</span>
+          ) : me ? (
             <>
               <Link to="/profile">Profil</Link>
-              <button className="linklike" onClick={handleLogout}>Se déconnecter</button>
+              <button className="linklike" onClick={handleLogout}>
+                Se déconnecter
+              </button>
             </>
           ) : (
             <>
@@ -68,6 +75,7 @@ export default function App() {
       </header>
 
       <main className="site-main">
+        {/* Tu peux aussi afficher un écran de chargement global si tu préfères */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cvs" element={<CVs />} />
@@ -81,7 +89,9 @@ export default function App() {
         </Routes>
       </main>
 
-      <Footer />
+      <footer className="site-footer">
+        <p>© {new Date().getFullYear()} — Yassine Hamri. Tous droits réservés.</p>
+      </footer>
     </BrowserRouter>
   );
 }
