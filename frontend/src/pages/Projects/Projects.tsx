@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import * as api from "../../services/api";
 import "./Projects.css";
 
+type Project = api.Project;
+
 export default function Projects() {
-  const [items, setItems] = useState<api.Project[]>([]);
+  const [items, setItems] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
@@ -32,18 +34,6 @@ export default function Projects() {
               {p.cover_url && <img src={p.cover_url} alt={p.title} className="cover" />}
               <h3 className="project-title">{p.title}</h3>
               {p.short_desc && <p className="project-desc">{p.short_desc}</p>}
-              <div className="project-meta">
-                {p.github_url && (
-                  <a href={p.github_url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noreferrer">
-                    Code
-                  </a>
-                )}
-                {p.demo_url && (
-                  <a href={p.demo_url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noreferrer">
-                    Démo
-                  </a>
-                )}
-              </div>
             </Link>
           ))}
         </div>
