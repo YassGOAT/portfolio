@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { Session } from "../../App";
+import "./Navbar.css";
 
 type Props = {
   me: Session;
