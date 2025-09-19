@@ -1,0 +1,65 @@
+/* Navbar globale */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #1f2937; /* gris foncé */
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo / brand */
+.site-header .brand a {
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #f9fafb;
+}
+.site-header .brand a strong {
+  color: #3b82f6; /* bleu */
+}
+
+/* Navigation */
+.site-nav {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.site-nav a,
+.site-nav .linklike {
+  color: #f9fafb;
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.2s;
+}
+
+.site-nav a:hover,
+.site-nav .linklike:hover {
+  color: #3b82f6;
+}
+
+/* Bouton style "lien" */
+.linklike {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* Responsive (mobile) */
+@media (max-width: 768px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .site-nav {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+}
