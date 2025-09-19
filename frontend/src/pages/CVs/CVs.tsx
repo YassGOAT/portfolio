@@ -4,7 +4,7 @@ import "./CVs.css";
 
 type Cv = api.Cv;
 
-export default function CVs({ me }: { me: api.Me | null }) {
+export default function CVs() {
   const [items, setItems] = useState<Cv[]>([]);
   const [active, setActive] = useState<Cv | null>(null);
   const [loading, setLoading] = useState(true);

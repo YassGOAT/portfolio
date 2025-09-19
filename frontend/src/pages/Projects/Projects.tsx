@@ -3,17 +3,15 @@ import { Link } from "react-router-dom";
 import * as api from "../../services/api";
 import "./Projects.css";
 
-type Project = api.Project;
-
 export default function Projects() {
-  const [items, setItems] = useState<Project[]>([]);
+  const [items, setItems] = useState<api.Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
     api
       .projects()
-      .then((rows) => setItems(rows))
+      .then((rows) => setItems(Array.isArray(rows) ? rows : []))
       .catch((e) => setErr(e?.message || "Erreur de chargement"))
       .finally(() => setLoading(false));
   }, []);
@@ -31,27 +29,17 @@ export default function Projects() {
         <div className="grid grid-cols-3">
           {items.map((p) => (
             <Link key={p.id_project} to={`/projects/${p.slug}`} className="card project-card">
-              {p.cover_url && <img src={p.cover_url} alt={p.title} />}
+              {p.cover_url && <img src={p.cover_url} alt={p.title} className="cover" />}
               <h3 className="project-title">{p.title}</h3>
               {p.short_desc && <p className="project-desc">{p.short_desc}</p>}
               <div className="project-meta">
                 {p.github_url && (
-                  <a
-                    href={p.github_url}
-                    onClick={(e) => e.stopPropagation()}
-                    target="_blank"
-                    rel="noopener"
-                  >
+                  <a href={p.github_url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noreferrer">
                     Code
                   </a>
                 )}
                 {p.demo_url && (
-                  <a
-                    href={p.demo_url}
-                    onClick={(e) => e.stopPropagation()}
-                    target="_blank"
-                    rel="noopener"
-                  >
+                  <a href={p.demo_url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noreferrer">
                     Démo
                   </a>
                 )}

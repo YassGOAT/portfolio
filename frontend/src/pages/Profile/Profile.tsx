@@ -2,36 +2,42 @@ import { useEffect, useState } from "react";
 import * as api from "../../services/api";
 import "./Profile.css";
 
-type Props = { me: api.Me; onMe: (m: api.Me | null) => void };
+export default function Profile() {
+  const [me, setMe] = useState<api.Session>(null);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
 
-export default function Profile({ me, onMe }: Props) {
-  // si jamais tu gardes ce composant quand non connecté:
-  if (!me) return null;
-
+  // Login
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPwd, setLoginPwd] = useState("");
+
+  // Register
   const [regName, setRegName] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regPwd, setRegPwd] = useState("");
 
-  const [name, setName] = useState(me.name);
-  const [email, setEmail] = useState(me.email);
-
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  // Update
+  const [name, setName] = useState("");
 
   useEffect(() => {
-    setName(me.name);
-    setEmail(me.email);
-  }, [me]);
+    api
+      .me()
+      .then((u) => {
+        setMe(u);
+        setName(u?.name || "");
+      })
+      .catch(() => setMe(null))
+      .finally(() => setLoading(false));
+  }, []);
 
   const doLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErr(null);
+    setLoading(true);
     try {
-      setLoading(true);
-      setErr(null);
-      const user = await api.login({ email: loginEmail, password: loginPwd });
-      onMe(user);
+      const { user } = await api.login({ email: loginEmail, password: loginPwd });
+      setMe(user);
+      setName(user?.name || "");
     } catch (e: any) {
       setErr(e?.message || "Connexion impossible");
     } finally {
@@ -41,11 +47,12 @@ export default function Profile({ me, onMe }: Props) {
 
   const doRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErr(null);
+    setLoading(true);
     try {
-      setLoading(true);
-      setErr(null);
-      const user = await api.register({ name: regName, email: regEmail, password: regPwd });
-      onMe(user);
+      const { user } = await api.register({ name: regName, email: regEmail, password: regPwd });
+      setMe(user);
+      setName(user?.name || "");
     } catch (e: any) {
       setErr(e?.message || "Inscription impossible");
     } finally {
@@ -55,11 +62,12 @@ export default function Profile({ me, onMe }: Props) {
 
   const saveMe = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!me) return;
+    setLoading(true);
+    setErr(null);
     try {
-      setLoading(true);
-      setErr(null);
-      const updated = await api.updateProfile({ name, email });
-      onMe(updated);
+      const { user } = await api.updateProfile({ name });
+      setMe(user);
     } catch (e: any) {
       setErr(e?.message || "Mise à jour impossible");
     } finally {
@@ -67,61 +75,45 @@ export default function Profile({ me, onMe }: Props) {
     }
   };
 
+  if (loading) return null;
+
   return (
     <section className="page">
       <h1 className="title">Profil</h1>
       {err && <p className="error">{err}</p>}
 
-      <form className="card" onSubmit={saveMe}>
-        <h3>Mes infos</h3>
-        <label>
-          Nom
+      {!me ? (
+        <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={doLogin} className="card">
+            <h3>Se connecter</h3>
+            <label>Email</label>
+            <input value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} required />
+            <label>Mot de passe</label>
+            <input type="password" value={loginPwd} onChange={(e) => setLoginPwd(e.target.value)} required />
+            <button className="btn">Connexion</button>
+          </form>
+
+          <form onSubmit={doRegister} className="card">
+            <h3>S’inscrire</h3>
+            <label>Nom</label>
+            <input value={regName} onChange={(e) => setRegName(e.target.value)} required />
+            <label>Email</label>
+            <input value={regEmail} onChange={(e) => setRegEmail(e.target.value)} required />
+            <label>Mot de passe</label>
+            <input type="password" value={regPwd} onChange={(e) => setRegPwd(e.target.value)} required />
+            <button className="btn">Créer mon compte</button>
+          </form>
+        </div>
+      ) : (
+        <form onSubmit={saveMe} className="card">
+          <h3>Mon profil</h3>
+          <label>Nom</label>
           <input value={name} onChange={(e) => setName(e.target.value)} />
-        </label>
-        <label>
-          Email
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <button className="btn" disabled={loading}>
-          Sauvegarder
-        </button>
-      </form>
-
-      <div className="grid grid-2">
-        <form className="card" onSubmit={doLogin}>
-          <h3>Connexion</h3>
-          <label>
-            Email
-            <input value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
-          </label>
-          <label>
-            Mot de passe
-            <input type="password" value={loginPwd} onChange={(e) => setLoginPwd(e.target.value)} />
-          </label>
-          <button className="btn" disabled={loading}>
-            Se connecter
-          </button>
+          <label>Email</label>
+          <input value={me.email || ""} disabled />
+          <button className="btn">Enregistrer</button>
         </form>
-
-        <form className="card" onSubmit={doRegister}>
-          <h3>Inscription</h3>
-          <label>
-            Nom
-            <input value={regName} onChange={(e) => setRegName(e.target.value)} />
-          </label>
-          <label>
-            Email
-            <input value={regEmail} onChange={(e) => setRegEmail(e.target.value)} />
-          </label>
-          <label>
-            Mot de passe
-            <input type="password" value={regPwd} onChange={(e) => setRegPwd(e.target.value)} />
-          </label>
-          <button className="btn" disabled={loading}>
-            S’inscrire
-          </button>
-        </form>
-      </div>
+      )}
     </section>
   );
 }
