@@ -1,0 +1,67 @@
+{
+  "presentation": {
+    "name": "Ton Nom",
+    "role": "Développeur Web",
+    "description": "Je suis un développeur passionné par le web, l'automatisation et l'UX...",
+    "photo": "assets/img/cv/photo.jpg",
+    "tags": [
+      "Front-end",
+      "Back-end",
+      "Python",
+      "JavaScript"
+    ]
+  },
+
+  "certifications": [
+    {
+      "title": "Certification Python",
+      "issuer": "OpenClassrooms",
+      "year": 2024,
+      "certificate_url": "#",
+      "logo": "assets/img/certifications/python.png"
+    },
+    {
+      "title": "Formation HTML/CSS",
+      "issuer": "Udemy",
+      "year": 2023,
+      "certificate_url": "#",
+      "logo": "assets/img/certifications/htmlcss.png"
+    }
+  ],
+
+  "projects": [
+    {
+      "title": "Portfolio Personnel",
+      "slug": "portfolio",
+      "description": "Un site vitrine moderne et responsive pour présenter mes projets.",
+      "techs": ["HTML", "CSS", "JavaScript"],
+      "image": "assets/img/projets/portfolio.png",
+      "github": "https://github.com/ton-profil/portfolio",
+      "demo": "https://ton-portfolio.com"
+    },
+    {
+      "title": "Scraper de citations",
+      "slug": "quotes-scraper",
+      "description": "Un script Python pour scraper des citations et les stocker en base.",
+      "techs": ["Python", "Requests", "BeautifulSoup"],
+      "image": "assets/img/projets/quotes_scraper.png",
+      "github": "https://github.com/ton-profil/quotes-scraper",
+      "demo": ""
+    }
+  ],
+
+  "contact": {
+    "email": "ton.email@exemple.com",
+    "location": "Ville, Pays",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ton-profil"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/ton-profil/"
+      }
+    ]
+  }
+}

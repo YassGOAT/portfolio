@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Yassine HAMRI</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- HEADER + NAVBAR -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-init">YH</span>
+            <span class="logo-text">Yassine HAMRI</span>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="#presentation">Présentation</a></li>
+                <li><a href="#cv">CV</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#projets">Projets</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
+
+        <!-- PRÉSENTATION -->
+        <section id="presentation" class="section section-presentation">
+            <div class="container">
+                <div class="presentation-text">
+                    <h1 id="presentation-title">Bonjour, je suis Ton Nom</h1>
+                    <h2 id="presentation-subtitle">Développeur ...</h2>
+                    <p id="presentation-description">
+                        Ce texte sera remplacé plus tard par les données du fichier JSON.
+                    </p>
+                    <button class="btn-primary" id="btn-voir-projets">
+                        Voir mes projets
+                    </button>
+                </div>
+                <div class="presentation-photo">
+                    <img src="assets/img/cv/photo.jpg" alt="Photo de profil">
+                </div>
+            </div>
+        </section>
+
+        <!-- CV -->
+        <section id="cv" class="section section-cv">
+            <div class="container">
+                <h2>CV</h2>
+                <p id="cv-intro">
+                    Mon CV détaillé sera chargé depuis le fichier JSON.
+                </p>
+                <a id="cv-download-link" class="btn-secondary" href="#" target="_blank">
+                    Télécharger mon CV
+                </a>
+
+                <div class="cv-grid">
+                    <div class="cv-column">
+                        <h3>Expériences</h3>
+                        <ul id="cv-experiences">
+                            <!-- JS : expériences insérées ici -->
+                        </ul>
+                    </div>
+                    <div class="cv-column">
+                        <h3>Compétences</h3>
+                        <ul id="cv-skills">
+                            <!-- JS : compétences insérées ici -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CERTIFICATIONS -->
+        <section id="certifications" class="section section-certifications">
+            <div class="container">
+                <h2>Certifications</h2>
+                <div class="certifications-list" id="certifications-list">
+                    <!-- JS : cartes de certifications -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJETS -->
+        <section id="projets" class="section section-projets">
+            <div class="container">
+                <h2>Projets</h2>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- JS : cartes projets -->
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section section-contact">
+            <div class="container">
+                <h2>Contact</h2>
+                <p>N’hésite pas à me contacter pour une opportunité ou une collaboration.</p>
+
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Nom</label>
+                        <input type="text" id="name" name="name" placeholder="Votre nom">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="votre@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Votre message"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Envoyer</button>
+                </form>
+
+                <div class="contact-links" id="contact-links">
+                    <!-- JS : liens (GitHub, LinkedIn, etc.) -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="footer-year"></span> Yassine HAMRI. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- JS (plus tard) -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
