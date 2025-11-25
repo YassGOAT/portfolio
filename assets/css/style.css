@@ -159,6 +159,22 @@ body {
     margin-left: auto;
 }
 
+/* Tags de présentation */
+.presentation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.presentation-tags span {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    color: var(--text-muted);
+}
+
 /* ========== BOUTONS ========== */
 .btn-primary,
 .btn-secondary {
@@ -218,18 +234,16 @@ body {
     font-size: 1.1rem;
 }
 
-.cv-column ul {
-    list-style: none;
-}
-
-.cv-column li {
+.cv-column p {
+    color: var(--text-muted);
     margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px dashed var(--border-soft);
-    font-size: 0.95rem;
 }
 
 /* ========== CERTIFICATIONS ========== */
+.section-certifications {
+    background: var(--bg-main);
+}
+
 .certifications-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -245,7 +259,31 @@ body {
     box-shadow: var(--shadow-soft);
 }
 
+.cert-card h3 {
+    margin-bottom: 0.4rem;
+    font-size: 1.05rem;
+}
+
+.cert-logo {
+    margin-bottom: 0.75rem;
+}
+
+.cert-logo img {
+    max-width: 64px;
+    height: auto;
+}
+
+.cert-issuer,
+.cert-year {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
 /* ========== PROJETS ========== */
+.section-projets {
+    background: var(--bg-section);
+}
+
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -284,7 +322,28 @@ body {
     margin-bottom: 0.75rem;
 }
 
+.project-card-techs {
+    font-size: 0.85rem;
+    color: var(--accent-light);
+    margin-bottom: 0.75rem;
+}
+
+.project-card-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
 /* ========== CONTACT ========== */
+.section-contact {
+    background: var(--bg-main);
+}
+
+.section-contact p {
+    color: var(--text-muted);
+}
+
 .contact-form {
     margin-top: 1rem;
     max-width: 480px;
@@ -359,8 +418,4 @@ body {
         grid-template-columns: 1fr;
     }
 }
-@media (max-width: 480px) {
-    .presentation-text h1 {
-        font-size: 2rem;
-    }
-}
+/* ========== FIN DU FICHIER ========== */
