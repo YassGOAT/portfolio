@@ -35,6 +35,13 @@
       "year": 2025,
       "certificate_url": "#",
       "logo": "assets/img/certifications/discord.png"
+    },
+    {
+      "title": "Certification Python",
+      "issuer": "OpenClassrooms",
+      "year": 2025,
+      "certificate_url": "#",
+      "logo": "assets/img/certifications/discord.png"
     }
   ],
 
