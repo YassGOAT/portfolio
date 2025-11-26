@@ -1,14 +1,16 @@
 {
   "presentation": {
-    "name": "Ton Nom",
-    "role": "Développeur Web",
+    "name": "Yassine Hamri",
+    "role": "Développeur Junior",
     "description": "Je suis un développeur passionné par le web, l'automatisation et l'UX...",
-    "photo": "assets/img/cv/photo.jpg",
+    "photo": "assets/img/cv/default-profile.png",
     "tags": [
       "Front-end",
       "Back-end",
       "Python",
-      "JavaScript"
+      "JavaScript",
+      "data scraping",
+      "UX/UI"
     ]
   },
 
@@ -16,16 +18,9 @@
     {
       "title": "Certification Python",
       "issuer": "OpenClassrooms",
-      "year": 2024,
+      "year": 2025,
       "certificate_url": "#",
       "logo": "assets/img/certifications/python.png"
-    },
-    {
-      "title": "Formation HTML/CSS",
-      "issuer": "Udemy",
-      "year": 2023,
-      "certificate_url": "#",
-      "logo": "assets/img/certifications/htmlcss.png"
     }
   ],
 
@@ -34,7 +29,7 @@
       "title": "Portfolio Personnel",
       "slug": "portfolio",
       "description": "Un site vitrine moderne et responsive pour présenter mes projets.",
-      "techs": ["HTML", "CSS", "JavaScript"],
+      "techs": ["HTML", "CSS", "JavaScript", "JSON", "PHP", "MySQL", "Python", "BeautifulSoup", "Requests"],
       "image": "assets/img/projets/portfolio.png",
       "github": "https://github.com/ton-profil/portfolio",
       "demo": "https://ton-portfolio.com"

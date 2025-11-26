@@ -390,6 +390,85 @@ body {
     margin-top: 2rem;
 }
 
+/* ========== HEADER (amelioré + responsive) ========== */
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Bouton burger */
+.burger {
+    width: 32px;
+    height: 24px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.burger span {
+    height: 3px;
+    width: 100%;
+    background: var(--text-main);
+    border-radius: 3px;
+    transition: 0.3s ease;
+}
+
+/* Animation burger en mode ouvert */
+.burger.active span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+}
+
+.burger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+}
+
+/* NAVBAR MOBILE */
+@media (max-width: 768px) {
+    .burger {
+        display: flex;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 64px;
+        right: -100%;
+        width: 70%;
+        height: calc(100vh - 64px);
+        background: rgba(5, 8, 22, 0.9);
+        backdrop-filter: blur(14px);
+        border-left: 1px solid var(--border-soft);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+        transition: right 0.35s ease;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.4);
+    }
+
+    .navbar.active {
+        right: 0;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .navbar a {
+        font-size: 1.1rem;
+    }
+}
+
+
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
     .header .container {
