@@ -260,3 +260,33 @@ function initScrollButtons() {
         });
     }
 }
+
+/* ==========================
+   MENU BURGER
+   ========================== */
+
+const burgerBtn = document.getElementById("burger-btn");
+const navbar = document.getElementById("navbar");
+
+if (burgerBtn && navbar) {
+    burgerBtn.addEventListener("click", () => {
+        burgerBtn.classList.toggle("active");
+        navbar.classList.toggle("active");
+    });
+}
+
+// Ferme le menu quand on clique sur un lien
+document.querySelectorAll(".navbar a").forEach(link => {
+    link.addEventListener("click", () => {
+        burgerBtn.classList.remove("active");
+        navbar.classList.remove("active");
+    });
+});
+
+// Ferme le menu quand on clique en dehors
+document.addEventListener("click", e => {
+    if (!e.target.closest(".navbar") && !e.target.closest("#burger-btn")) {
+        burgerBtn.classList.remove("active");
+        navbar.classList.remove("active");
+    }
+});

@@ -53,13 +53,14 @@ body {
     border-bottom: 1px solid var(--border-soft);
 }
 
-.header .container {
+.header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 64px;
 }
 
+/* Logo */
 .logo {
     display: flex;
     align-items: center;
@@ -84,39 +85,92 @@ body {
     letter-spacing: 0.04em;
 }
 
+/* NAVBAR */
+.navbar {
+    display: flex;
+}
+
 .navbar ul {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
-.navbar a {
-    text-decoration: none;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    position: relative;
-    padding-bottom: 0.25rem;
-    transition: color 0.2s ease;
-}
-
-.navbar a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0%;
-    height: 2px;
-    background: var(--accent);
+/* ========== BOUTONS UNIFORMISÉS ========== */
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.2rem;
     border-radius: 999px;
-    transition: width 0.2s ease;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s ease;
 }
 
-.navbar a:hover {
-    color: var(--text-main);
+/* bouton principal = comme "Voir mes projets" */
+.btn-primary {
+    background: linear-gradient(135deg, #6165f1, #8f92ff);
+    color: #fff;
+    border: none;
+    box-shadow: 0 12px 25px rgba(79, 70, 229, 0.45);
 }
 
-.navbar a:hover::after {
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 35px rgba(79, 70, 229, 0.6);
+}
+
+/* bouton secondaire (contour) */
+.btn-secondary {
+    color: #c7c9ff;
+    border: 1px solid #8183ff;
+    background: rgba(129, 131, 255, 0.15);
+}
+
+.btn-secondary:hover {
+    background: rgba(129, 131, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Boutons dans la navbar (version compacte) */
+.nav-btn {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    box-shadow: none;
+}
+
+/* ========== BOUTON BURGER ========== */
+.burger {
+    width: 32px;
+    height: 24px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.burger span {
+    height: 3px;
     width: 100%;
+    background: var(--text-main);
+    border-radius: 3px;
+    transition: 0.3s ease;
+}
+
+/* Animation burger en mode ouvert */
+.burger.active span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+}
+
+.burger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
 }
 
 /* ========== SECTION PRÉSENTATION ========== */
@@ -173,42 +227,6 @@ body {
     border-radius: 999px;
     border: 1px solid var(--border-soft);
     color: var(--text-muted);
-}
-
-/* ========== BOUTONS ========== */
-.btn-primary,
-.btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.6rem 1.2rem;
-    border-radius: 999px;
-    border: 1px solid transparent;
-    font-size: 0.95rem;
-    cursor: pointer;
-    text-decoration: none;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, border-color 0.2s ease;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    color: #fff;
-    box-shadow: 0 12px 25px rgba(79, 70, 229, 0.5);
-}
-
-.btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 16px 35px rgba(79, 70, 229, 0.6);
-}
-
-.btn-secondary {
-    background: transparent;
-    color: var(--accent-light);
-    border-color: var(--accent);
-}
-
-.btn-secondary:hover {
-    background: rgba(99, 102, 241, 0.1);
 }
 
 /* ========== TITRES DE SECTIONS ========== */
@@ -390,67 +408,30 @@ body {
     margin-top: 2rem;
 }
 
-/* ========== HEADER (amelioré + responsive) ========== */
-
-.header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
-/* Bouton burger */
-.burger {
-    width: 32px;
-    height: 24px;
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    cursor: pointer;
-}
-
-.burger span {
-    height: 3px;
-    width: 100%;
-    background: var(--text-main);
-    border-radius: 3px;
-    transition: 0.3s ease;
-}
-
-/* Animation burger en mode ouvert */
-.burger.active span:nth-child(1) {
-    transform: translateY(10px) rotate(45deg);
-}
-
-.burger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.burger.active span:nth-child(3) {
-    transform: translateY(-10px) rotate(-45deg);
-}
-
-/* NAVBAR MOBILE */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+    .header-inner {
+        gap: 0.5rem;
+    }
+
     .burger {
         display: flex;
     }
 
+    /* navbar en panneau latéral */
     .navbar {
         position: fixed;
         top: 64px;
         right: -100%;
         width: 70%;
         height: calc(100vh - 64px);
-        background: rgba(5, 8, 22, 0.9);
+        background: rgba(5, 8, 22, 0.96);
         backdrop-filter: blur(14px);
         border-left: 1px solid var(--border-soft);
-        display: flex;
         flex-direction: column;
         padding: 2rem 1.5rem;
-        gap: 1.5rem;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         transition: right 0.35s ease;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.4);
     }
 
     .navbar.active {
@@ -462,27 +443,10 @@ body {
         gap: 1.2rem;
     }
 
-    .navbar a {
-        font-size: 1.1rem;
-    }
-}
-
-
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .header .container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-        height: auto;
-        padding-top: 0.5rem;
-        padding-bottom: 0.75rem;
-    }
-
-    .navbar ul {
-        flex-wrap: wrap;
-        gap: 0.75rem;
+    .nav-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+        box-shadow: 0 12px 25px rgba(79, 70, 229, 0.45);
     }
 
     .section-presentation .container {
@@ -497,4 +461,12 @@ body {
         grid-template-columns: 1fr;
     }
 }
-/* ========== FIN DU FICHIER ========== */
+@media (max-width: 480px) {
+    .section-presentation {
+        padding-top: 3rem;
+    }
+
+    .presentation-text h1 {
+        font-size: 2rem;
+    }
+}
