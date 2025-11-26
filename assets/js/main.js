@@ -1,4 +1,10 @@
+// =========================================================
 // main.js
+// - Chargement du JSON
+// - Remplissage des sections
+// - Gestion navbar / burger / scroll
+// - Gestion certifications (3 visibles + pagination)
+// =========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
     const DATA_URL = "assets/data/data.json";
@@ -12,20 +18,22 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(data => {
             initPresentation(data.presentation);
-            initCertifications(data.certifications);
+            setupCertifications(data.certifications);
             initProjects(data.projects);
             initContact(data.contact);
             initFooterYear();
             initScrollButtons();
+            initBurgerMenu();
         })
         .catch(error => {
             console.error("Impossible de charger data.json :", error);
         });
 });
 
-/* ==========================
-   PRÉSENTATION
-   ========================== */
+
+// =========================================================
+// PRÉSENTATION
+// =========================================================
 
 function initPresentation(presentation) {
     if (!presentation) return;
@@ -63,19 +71,51 @@ function initPresentation(presentation) {
     }
 }
 
-/* ==========================
-   CERTIFICATIONS
-   ========================== */
 
-function initCertifications(certifications) {
+// =========================================================
+// CERTIFICATIONS
+// - 3 visibles par défaut
+// - max 9 par page
+// - pagination + bouton Voir plus / Masquer
+// =========================================================
+
+let CERTIFICATIONS_DATA = [];
+let CURRENT_CERT_PAGE = 1;
+const CERTS_PER_PAGE = 9;
+const CERTS_VISIBLE_DEFAULT = 3;
+
+function setupCertifications(certifications) {
+    if (!Array.isArray(certifications)) return;
+
+    CERTIFICATIONS_DATA = certifications;
+    CURRENT_CERT_PAGE = 1;
+
+    renderCertificationsPage();
+    renderCertificationsPagination();
+    setupCertificationsToggle();
+}
+
+function getCertificationsForCurrentPage() {
+    const startIndex = (CURRENT_CERT_PAGE - 1) * CERTS_PER_PAGE;
+    const endIndex = startIndex + CERTS_PER_PAGE;
+    return CERTIFICATIONS_DATA.slice(startIndex, endIndex);
+}
+
+function renderCertificationsPage() {
     const container = document.getElementById("certifications-list");
-    if (!container || !Array.isArray(certifications)) return;
+    if (!container) return;
 
+    const certsPage = getCertificationsForCurrentPage();
     container.innerHTML = "";
 
-    certifications.forEach(cert => {
+    certsPage.forEach((cert, index) => {
         const card = document.createElement("article");
         card.classList.add("cert-card");
+
+        // Au-delà de la 3e, marquée pour être masquée par défaut
+        if (index >= CERTS_VISIBLE_DEFAULT) {
+            card.classList.add("cert-hidden");
+        }
 
         const logo = document.createElement("div");
         logo.classList.add("cert-logo");
@@ -101,30 +141,123 @@ function initCertifications(certifications) {
             year.textContent = `Année : ${cert.year}`;
         }
 
-        const link = document.createElement("a");
+        if (cert.logo) card.appendChild(logo);
+        card.appendChild(title);
+        if (cert.issuer) card.appendChild(issuer);
+        if (cert.year) card.appendChild(year);
+
         if (cert.certificate_url) {
+            const link = document.createElement("a");
             link.href = cert.certificate_url;
             link.target = "_blank";
             link.rel = "noopener noreferrer";
             link.textContent = "Voir le certificat";
             link.classList.add("btn-secondary");
-        }
-
-        card.appendChild(logo);
-        card.appendChild(title);
-        card.appendChild(issuer);
-        card.appendChild(year);
-        if (cert.certificate_url) {
             card.appendChild(link);
         }
 
         container.appendChild(card);
     });
+
+    // Réinitialise l’état du bouton Voir plus / Masquer
+    resetCertToggleButton();
 }
 
-/* ==========================
-   PROJETS
-   ========================== */
+function renderCertificationsPagination() {
+    const paginationContainer = document.getElementById("cert-pagination");
+    if (!paginationContainer) return;
+
+    const totalCerts = CERTIFICATIONS_DATA.length;
+    const totalPages = Math.ceil(totalCerts / CERTS_PER_PAGE);
+
+    paginationContainer.innerHTML = "";
+
+    // S’il n’y a qu’une page -> pas de pagination
+    if (totalPages <= 1) {
+        paginationContainer.style.display = "none";
+        return;
+    }
+
+    paginationContainer.style.display = "flex";
+
+    for (let page = 1; page <= totalPages; page++) {
+        const btn = document.createElement("button");
+        btn.textContent = page;
+        btn.classList.add("cert-page-btn");
+        if (page === CURRENT_CERT_PAGE) {
+            btn.classList.add("active");
+        }
+
+        btn.addEventListener("click", () => {
+            CURRENT_CERT_PAGE = page;
+            renderCertificationsPage();
+            renderCertificationsPagination();
+        });
+
+        paginationContainer.appendChild(btn);
+    }
+}
+
+function setupCertificationsToggle() {
+    const toggleBtn = document.getElementById("cert-toggle-btn");
+    if (!toggleBtn) return;
+
+    toggleBtn.addEventListener("click", () => {
+        const container = document.getElementById("certifications-list");
+        if (!container) return;
+
+        const hiddenCards = container.querySelectorAll(".cert-hidden");
+        if (hiddenCards.length === 0) return;
+
+        const isExpanded = toggleBtn.dataset.expanded === "true";
+
+        if (isExpanded) {
+            // Re-masquer les cartes au-delà des 3 premières
+            hiddenCards.forEach(card => {
+                card.style.display = "none";
+            });
+            toggleBtn.textContent = "Voir plus";
+            toggleBtn.dataset.expanded = "false";
+        } else {
+            // Afficher toutes les cartes de la page
+            hiddenCards.forEach(card => {
+                card.style.display = "block";
+            });
+            toggleBtn.textContent = "Masquer";
+            toggleBtn.dataset.expanded = "true";
+        }
+    });
+}
+
+function resetCertToggleButton() {
+    const toggleBtn = document.getElementById("cert-toggle-btn");
+    const container = document.getElementById("certifications-list");
+    if (!toggleBtn || !container) return;
+
+    const cards = container.querySelectorAll(".cert-card");
+    const hiddenCards = container.querySelectorAll(".cert-card.cert-hidden");
+
+    // Si 3 certifs ou moins -> on cache le bouton Voir plus
+    if (cards.length <= CERTS_VISIBLE_DEFAULT || hiddenCards.length === 0) {
+        toggleBtn.style.display = "none";
+        toggleBtn.dataset.expanded = "false";
+        return;
+    }
+
+    // Sinon, on le réaffiche en mode "Voir plus"
+    toggleBtn.style.display = "inline-flex";
+    toggleBtn.textContent = "Voir plus";
+    toggleBtn.dataset.expanded = "false";
+
+    hiddenCards.forEach(card => {
+        card.style.display = "none";
+    });
+}
+
+
+// =========================================================
+// PROJETS
+// =========================================================
 
 function initProjects(projects) {
     const grid = document.getElementById("projects-grid");
@@ -136,7 +269,6 @@ function initProjects(projects) {
         const card = document.createElement("article");
         card.classList.add("project-card");
 
-        // Image du projet
         if (project.image) {
             const img = document.createElement("img");
             img.src = project.image;
@@ -148,24 +280,20 @@ function initProjects(projects) {
         const body = document.createElement("div");
         body.classList.add("project-card-body");
 
-        // Titre
         const title = document.createElement("h3");
         title.classList.add("project-card-title");
         title.textContent = project.title || "Projet";
 
-        // Description
         const desc = document.createElement("p");
         desc.classList.add("project-card-desc");
         desc.textContent = project.description || "";
 
-        // Techs
         const techList = document.createElement("p");
         techList.classList.add("project-card-techs");
         if (Array.isArray(project.techs) && project.techs.length > 0) {
             techList.textContent = project.techs.join(" • ");
         }
 
-        // Liens (GitHub / Demo)
         const linksWrapper = document.createElement("div");
         linksWrapper.classList.add("project-card-links");
 
@@ -203,23 +331,22 @@ function initProjects(projects) {
     });
 }
 
-/* ==========================
-   CONTACT
-   ========================== */
+
+// =========================================================
+// CONTACT
+// =========================================================
 
 function initContact(contact) {
     if (!contact) return;
 
+    const contactText = document.querySelector(".section-contact p");
     const linksContainer = document.getElementById("contact-links");
-    const contactSection = document.querySelector(".section-contact p");
 
-    // Email dans le texte
-    if (contactSection && contact.email) {
-        contactSection.innerHTML = `N’hésite pas à me contacter à cette adresse : 
+    if (contactText && contact.email) {
+        contactText.innerHTML = `N’hésite pas à me contacter à cette adresse : 
             <a href="mailto:${contact.email}">${contact.email}</a>`;
     }
 
-    // Liens (GitHub, LinkedIn, etc.)
     if (!linksContainer || !Array.isArray(contact.links)) return;
 
     linksContainer.innerHTML = "";
@@ -235,20 +362,21 @@ function initContact(contact) {
     });
 }
 
-/* ==========================
-   FOOTER
-   ========================== */
+
+// =========================================================
+// FOOTER – année automatique
+// =========================================================
 
 function initFooterYear() {
     const yearSpan = document.getElementById("footer-year");
     if (!yearSpan) return;
-    const year = new Date().getFullYear();
-    yearSpan.textContent = year;
+    yearSpan.textContent = new Date().getFullYear();
 }
 
-/* ==========================
-   BOUTON "VOIR MES PROJETS"
-   ========================== */
+
+// =========================================================
+// BOUTON "VOIR MES PROJETS" – scroll vers la section projets
+// =========================================================
 
 function initScrollButtons() {
     const btnProjets = document.getElementById("btn-voir-projets");
@@ -261,32 +389,27 @@ function initScrollButtons() {
     }
 }
 
-/* ==========================
-   MENU BURGER
-   ========================== */
 
-const burgerBtn = document.getElementById("burger-btn");
-const navbar = document.getElementById("navbar");
+// =========================================================
+// NAVBAR BURGER (mobile)
+// =========================================================
 
-if (burgerBtn && navbar) {
+function initBurgerMenu() {
+    const burgerBtn = document.getElementById("burger-btn");
+    const navbar = document.getElementById("navbar");
+
+    if (!burgerBtn || !navbar) return;
+
     burgerBtn.addEventListener("click", () => {
         burgerBtn.classList.toggle("active");
         navbar.classList.toggle("active");
     });
-}
 
-// Ferme le menu quand on clique sur un lien
-document.querySelectorAll(".navbar a").forEach(link => {
-    link.addEventListener("click", () => {
-        burgerBtn.classList.remove("active");
-        navbar.classList.remove("active");
+    // Fermer le menu lorsqu'on clique sur un lien
+    navbar.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            burgerBtn.classList.remove("active");
+            navbar.classList.remove("active");
+        });
     });
-});
-
-// Ferme le menu quand on clique en dehors
-document.addEventListener("click", e => {
-    if (!e.target.closest(".navbar") && !e.target.closest("#burger-btn")) {
-        burgerBtn.classList.remove("active");
-        navbar.classList.remove("active");
-    }
-});
+}
