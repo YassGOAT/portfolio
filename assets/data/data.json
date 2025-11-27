@@ -19,13 +19,13 @@
       "id": "devweb",
       "title": "Développement Web",
       "description": "Orienté front-end / back-end, UX/UI.",
-      "file": "assets/cv/cv-devweb.pdf"
+      "file": "assets/img/cv/cv-devweb.pdf"
     },
     {
       "id": "data",
       "title": "Data Analyse",
       "description": "Orienté analyses de données, scrapping et visualisation.",
-      "file": "assets/cv/cv-data-analyst.pdf"
+      "file": "assets/img/cv/cv-data-analyst.pdf"
     }
   ],
 
