@@ -14,6 +14,21 @@
     ]
   },
 
+  "cv": [
+    {
+      "id": "devweb",
+      "title": "Développeur Web",
+      "description": "Orienté front-end / back-end, projets web et portfolio.",
+      "file": "assets/cv/cv-devweb.pdf"
+    },
+    {
+      "id": "data",
+      "title": "Data Analyse",
+      "description": "Orienté analyses de données, scrapping et visualisation.",
+      "file": "assets/cv/cv-data-analyst.pdf"
+    }
+  ],
+
   "certifications": [
     {
       "title": "Certification Python",

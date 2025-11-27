@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setupCertifications(data.certifications);
             initProjects(data.projects);
             initContact(data.contact);
+            initCV(data.cv);
             initFooterYear();
             initScrollButtons();
             initBurgerMenu();
