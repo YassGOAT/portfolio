@@ -1,10 +1,12 @@
 // =========================================================
-// main.js
-// - Chargement du JSON
-// - Remplissage des sections
-// - Gestion navbar / burger / scroll
-// - Gestion certifications (3 visibles + pagination)
+// main.js – logique du portfolio
 // =========================================================
+
+// Config certifications
+let CERTIFICATIONS_DATA = [];
+let CURRENT_CERT_PAGE = 1;
+const CERTS_PER_PAGE = 9;
+const CERTS_VISIBLE_DEFAULT = 3;
 
 document.addEventListener("DOMContentLoaded", () => {
     const DATA_URL = "assets/data/data.json";
@@ -25,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initFooterYear();
             initScrollButtons();
             initBurgerMenu();
+            initLogoScrollTop();
         })
         .catch(error => {
             console.error("Impossible de charger data.json :", error);
@@ -74,16 +77,38 @@ function initPresentation(presentation) {
 
 
 // =========================================================
-// CERTIFICATIONS
-// - 3 visibles par défaut
-// - max 9 par page
-// - pagination + bouton Voir plus / Masquer
+// CV – liens chargés depuis le JSON
 // =========================================================
 
-let CERTIFICATIONS_DATA = [];
-let CURRENT_CERT_PAGE = 1;
-const CERTS_PER_PAGE = 9;
-const CERTS_VISIBLE_DEFAULT = 3;
+function initCV(cvItems) {
+    if (!Array.isArray(cvItems)) return;
+
+    const links = document.querySelectorAll(".cv-link");
+
+    links.forEach(link => {
+        const id = link.dataset.cvId;
+        const cvItem = cvItems.find(item => item.id === id);
+        if (!cvItem) return;
+
+        // URL PDF
+        link.href = cvItem.file;
+
+        // Optionnel : maj des textes
+        const titleEl = document.getElementById(`cv-${id}-title`);
+        const descEl = document.getElementById(`cv-${id}-desc`);
+
+        if (titleEl && cvItem.title) titleEl.textContent = cvItem.title;
+        if (descEl && cvItem.description) descEl.textContent = cvItem.description;
+    });
+}
+
+
+// =========================================================
+// CERTIFICATIONS
+// - 3 visibles par défaut
+// - 9 par page + pagination
+// - bouton Voir plus / Masquer
+// =========================================================
 
 function setupCertifications(certifications) {
     if (!Array.isArray(certifications)) return;
@@ -160,7 +185,6 @@ function renderCertificationsPage() {
         container.appendChild(card);
     });
 
-    // Réinitialise l’état du bouton Voir plus / Masquer
     resetCertToggleButton();
 }
 
@@ -173,7 +197,6 @@ function renderCertificationsPagination() {
 
     paginationContainer.innerHTML = "";
 
-    // S’il n’y a qu’une page -> pas de pagination
     if (totalPages <= 1) {
         paginationContainer.style.display = "none";
         return;
@@ -213,14 +236,12 @@ function setupCertificationsToggle() {
         const isExpanded = toggleBtn.dataset.expanded === "true";
 
         if (isExpanded) {
-            // Re-masquer les cartes au-delà des 3 premières
             hiddenCards.forEach(card => {
                 card.style.display = "none";
             });
             toggleBtn.textContent = "Voir plus";
             toggleBtn.dataset.expanded = "false";
         } else {
-            // Afficher toutes les cartes de la page
             hiddenCards.forEach(card => {
                 card.style.display = "block";
             });
@@ -238,14 +259,12 @@ function resetCertToggleButton() {
     const cards = container.querySelectorAll(".cert-card");
     const hiddenCards = container.querySelectorAll(".cert-card.cert-hidden");
 
-    // Si 3 certifs ou moins -> on cache le bouton Voir plus
     if (cards.length <= CERTS_VISIBLE_DEFAULT || hiddenCards.length === 0) {
         toggleBtn.style.display = "none";
         toggleBtn.dataset.expanded = "false";
         return;
     }
 
-    // Sinon, on le réaffiche en mode "Voir plus"
     toggleBtn.style.display = "inline-flex";
     toggleBtn.textContent = "Voir plus";
     toggleBtn.dataset.expanded = "false";
@@ -376,7 +395,7 @@ function initFooterYear() {
 
 
 // =========================================================
-// BOUTON "VOIR MES PROJETS" – scroll vers la section projets
+// BOUTON "VOIR MES PROJETS"
 // =========================================================
 
 function initScrollButtons() {
@@ -392,7 +411,7 @@ function initScrollButtons() {
 
 
 // =========================================================
-// NAVBAR BURGER (mobile)
+// NAVBAR BURGER
 // =========================================================
 
 function initBurgerMenu() {
@@ -406,11 +425,24 @@ function initBurgerMenu() {
         navbar.classList.toggle("active");
     });
 
-    // Fermer le menu lorsqu'on clique sur un lien
     navbar.querySelectorAll("a").forEach(link => {
         link.addEventListener("click", () => {
             burgerBtn.classList.remove("active");
             navbar.classList.remove("active");
         });
+    });
+}
+
+
+// =========================================================
+// LOGO → retour en haut de page
+// =========================================================
+
+function initLogoScrollTop() {
+    const logoLink = document.getElementById("logo-link");
+    if (!logoLink) return;
+
+    logoLink.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 }
