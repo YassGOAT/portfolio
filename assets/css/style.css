@@ -435,46 +435,105 @@ body {
     background: var(--bg-main);
 }
 
-.section-contact p {
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.contact-card {
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-soft);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-soft);
+}
+
+.contact-card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.contact-info {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.contact-info li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.95rem;
+}
+
+.contact-label {
+    min-width: 90px;
+    font-weight: 500;
     color: var(--text-muted);
 }
 
-.contact-form {
-    margin-top: 1rem;
-    max-width: 480px;
+#contact-email a {
+    color: var(--accent-light);
+    text-decoration: none;
 }
 
-.form-group {
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+#contact-email a:hover {
+    text-decoration: underline;
 }
 
-.form-group label {
-    font-size: 0.9rem;
-}
-
-.form-group input,
-.form-group textarea {
-    padding: 0.5rem 0.7rem;
-    border-radius: 0.5rem;
-    border: 1px solid var(--border-soft);
-    background: rgba(15, 23, 42, 0.9);
-    color: var(--text-main);
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: 1px solid var(--accent);
+.contact-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
 }
 
 .contact-links {
-    margin-top: 1.5rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.6rem;
 }
+
+.contact-btn {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+/* Boutons réseaux sociaux (VERSION PLUS GROS) */
+.contact-social {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid #8183ff;
+    background: rgba(129, 131, 255, 0.15);
+    color: #c7c9ff;
+    text-decoration: none;
+    font-size: 1rem; /* texte plus gros */
+    transition: 0.2s ease;
+}
+
+.contact-social:hover {
+    background: rgba(129, 131, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.contact-social-icon {
+    width: 26px;      /* icône plus grande */
+    height: 26px;
+    object-fit: contain;
+    display: block;
+}
+
+
 
 /* =======================================================================================
    FOOTER
@@ -500,6 +559,10 @@ body {
 
     .cv-grid {
         grid-template-columns: 1fr; /* 1 carte par ligne sur tablette / mobile */
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
     }
 }
 

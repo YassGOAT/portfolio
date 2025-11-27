@@ -133,29 +133,47 @@
         <section id="contact" class="section section-contact">
             <div class="container">
                 <h2>Contact</h2>
-                <p>N’hésite pas à me contacter pour une opportunité ou une collaboration.</p>
+            
+                <div class="contact-grid">
+                    <!-- Bloc infos perso -->
+                    <article class="contact-card">
+                        <h3>Informations</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <span class="contact-label">E-mail :</span>
+                                <a id="contact-email" class="btn-secondary contact-btn"></a>
+                            </li>
 
-                <form class="contact-form">
-                    <div class="form-group">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" placeholder="Votre nom">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="votre@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Votre message"></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary">Envoyer</button>
-                </form>
+                            <li>
+                                <span class="contact-label">Téléphone :</span>
+                                <a id="contact-phone" class="btn-secondary contact-btn"></a>
+                            </li>
 
-                <div class="contact-links" id="contact-links">
-                    <!-- JS : liens (GitHub, LinkedIn, etc.) -->
+                                <span class="contact-label">Ville :</span>
+                                <span id="contact-city"></span>
+                            </li>
+                            <li>
+                                <span class="contact-label">Statut :</span>
+                                <span id="contact-status"></span>
+                            </li>
+                        </ul>
+                    </article>
+                
+                    <!-- Bloc réseaux -->
+                    <article class="contact-card">
+                        <h3>Réseaux</h3>
+                        <p class="contact-text">
+                            Tu peux aussi me retrouver sur ces plateformes :
+                        </p>
+                        <div class="contact-links" id="contact-links">
+                            <!-- Liens sociaux via JS -->
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
+
+
 
     </main>
 

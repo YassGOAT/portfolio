@@ -355,27 +355,59 @@ function initProjects(projects) {
 function initContact(contact) {
     if (!contact) return;
 
-    const contactText = document.querySelector(".section-contact p");
+    const emailEl = document.getElementById("contact-email");
+    const phoneEl = document.getElementById("contact-phone");
+    const cityEl = document.getElementById("contact-city");
+    const statusEl = document.getElementById("contact-status");
     const linksContainer = document.getElementById("contact-links");
 
-    if (contactText && contact.email) {
-        contactText.innerHTML = `N’hésite pas à me contacter à cette adresse : 
-            <a href="mailto:${contact.email}">${contact.email}</a>`;
+    // E-mail → bouton cliquable
+    if (emailEl && contact.email) {
+        emailEl.textContent = contact.email;
+        emailEl.href = `https://mail.google.com/mail/?view=cm&to=${contact.email}`;
+        emailEl.target = "_blank";
     }
 
-    if (!linksContainer || !Array.isArray(contact.links)) return;
+    // Téléphone → bouton cliquable avec "tel:"
+    if (phoneEl && contact.phone) {
+        phoneEl.textContent = contact.phone;
+        phoneEl.href = `tel:${contact.phone.replace(/\s+/g, '')}`;
+    }
 
-    linksContainer.innerHTML = "";
+    // Autres infos classiques
+    if (cityEl && contact.city) cityEl.textContent = contact.city;
+    if (statusEl && contact.status) statusEl.textContent = contact.status;
 
-    contact.links.forEach(link => {
-        const a = document.createElement("a");
-        a.href = link.url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.textContent = link.label || link.url;
-        a.classList.add("btn-secondary");
-        linksContainer.appendChild(a);
-    });
+    // Réseaux sociaux
+    if (linksContainer) {
+        linksContainer.innerHTML = "";
+
+        if (Array.isArray(contact.links)) {
+            contact.links.forEach(link => {
+                const a = document.createElement("a");
+                a.href = link.url;
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+                a.classList.add("contact-social");
+
+                // icône
+                if (link.icon) {
+                    const img = document.createElement("img");
+                    img.src = link.icon;
+                    img.alt = link.label;
+                    img.classList.add("contact-social-icon");
+                    a.appendChild(img);
+                }
+
+                // texte du réseau
+                const span = document.createElement("span");
+                span.textContent = link.label;
+                a.appendChild(span);
+
+                linksContainer.appendChild(a);
+            });
+        }
+    }
 }
 
 

@@ -3,7 +3,7 @@
     "name": "Yassine Hamri",
     "role": "Développeur Junior",
     "description": "Je suis un développeur intérressé par le web, l'automatisation et l'UX/UI",
-    "photo": "assets/img/default-profile.png",
+    "photo": "assets/img/icons/default-profile.png",
     "tags": ["Front-end", "Back-end", "Python", "JavaScript"]
   },
 
@@ -54,8 +54,15 @@
   ],
 
   "projects": [],
+
   "contact": {
     "email": "yyhamri@gmail.com",
-    "links": []
+    "phone": "+33 6 35 88 33 30",
+    "city": "Firminy, France",
+    "status": "Etudiant à la recherche d'une alternance ou d'une opportunité professionnelle",
+    "links": [
+      { "label": "GitHub", "url": "https://github.com/YassGOAT", "icon": "assets/img/icons/github.png" },
+      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/yassine-hamri-31a121272", "icon": "assets/img/icons/linkedin.png" }
+    ]
   }
 }
