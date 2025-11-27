@@ -73,7 +73,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 90px;
 }
 
 /* LOGO */
@@ -85,21 +85,21 @@ a {
 }
 
 .logo-init {
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
     border-radius: 999px;
     background: radial-gradient(circle at 20% 0%, var(--accent-light), var(--accent));
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     color: #fff;
 }
 
 .logo-text {
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
 }
 
 .logo:hover .logo-text {
@@ -163,8 +163,8 @@ a {
 
 /* Version compacte pour navbar */
 .nav-btn {
-    padding: 0.35rem 0.9rem !important;
-    font-size: 0.85rem !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 1rem !important;
     box-shadow: none !important;
 }
 
