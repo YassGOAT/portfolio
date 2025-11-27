@@ -22,9 +22,6 @@ body {
 
 /* =======================================================================================
    VARIABLES CSS
-   - Palette de couleurs
-   - Rayons, ombres, etc.
-   - Permet de modifier facilement tout le design
 ======================================================================================= */
 :root {
     --bg-main: #050816;
@@ -40,7 +37,6 @@ body {
 
 /* =======================================================================================
    UTILITAIRES
-   Classe .container utilisée partout pour centrer le contenu
 ======================================================================================= */
 .container {
     width: 100%;
@@ -55,9 +51,6 @@ body {
 
 /* =======================================================================================
    NAVBAR + HEADER
-   - Sticky en haut
-   - Effet glass-morphisme
-   - Contient logo + menu + burger (mobile)
 ======================================================================================= */
 .header {
     position: sticky;
@@ -75,11 +68,12 @@ body {
     height: 64px;
 }
 
-/* ===== LOGO ===== */
+/* LOGO */
 .logo {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    cursor: pointer; /* pour montrer que c'est cliquable */
 }
 
 .logo-init {
@@ -100,7 +94,11 @@ body {
     letter-spacing: 0.04em;
 }
 
-/* ===== NAVBAR (DESKTOP) ===== */
+.logo:hover .logo-text {
+    color: var(--accent-light);
+}
+
+/* NAVBAR */
 .navbar {
     display: flex;
 }
@@ -112,10 +110,8 @@ body {
 }
 
 /* =======================================================================================
-   BOUTONS UNIFORMISÉS (TOUS identiques au bouton "Voir mes projets")
+   BOUTONS
 ======================================================================================= */
-
-/* Bouton principal : dégradé violet + glow */
 .btn-primary {
     background: linear-gradient(135deg, #6165f1, #8f92ff);
     color: #fff;
@@ -137,7 +133,6 @@ body {
     box-shadow: 0 18px 35px rgba(79, 70, 229, 0.6);
 }
 
-/* Bouton contour */
 .btn-secondary {
     padding: 0.55rem 1.2rem;
     border-radius: 999px;
@@ -167,8 +162,6 @@ body {
 
 /* =======================================================================================
    BURGER MENU
-   - Apparaît sur mobile
-   - Animation croix / 3 barres
 ======================================================================================= */
 .burger {
     width: 32px;
@@ -187,7 +180,6 @@ body {
     transition: 0.3s ease;
 }
 
-/* Animation burger en mode actif */
 .burger.active span:nth-child(1) {
     transform: translateY(10px) rotate(45deg);
 }
@@ -231,6 +223,21 @@ body {
     max-width: 520px;
 }
 
+.presentation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+}
+
+.presentation-tags span {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
 /* Photo */
 .presentation-photo img {
     width: 260px;
@@ -242,24 +249,8 @@ body {
     margin-left: auto;
 }
 
-/* Tags de compétences */
-.presentation-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.75rem;
-}
-
-.presentation-tags span {
-    padding: 0.2rem 0.6rem;
-    border-radius: 999px;
-    border: 1px solid var(--border-soft);
-    color: var(--text-muted);
-    font-size: 0.8rem;
-}
-
 /* =======================================================================================
-   SECTION CV (si tu gardes)
+   SECTION CV
 ======================================================================================= */
 .section-cv {
     background: var(--bg-section);
@@ -268,7 +259,7 @@ body {
 .cv-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
     margin-top: 2rem;
 }
 
@@ -278,23 +269,78 @@ body {
 
 .cv-column p {
     color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* Carte visuelle de CV (comme une cert-card) */
+.cv-preview {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 3 / 4;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-soft);
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 1.2rem;
+}
+
+.cv-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cv-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Aperçu d’un CV dans la carte */
+.cv-preview {
+    width: 80%; /* ou 100% si tu veux */
+    max-width: 280px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-soft);
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.cv-preview img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+/* Titres & textes dans les cartes CV */
+.cv-title {
+    font-size: 1.05rem;
+    margin-top: 0.25rem;
+}
+
+.cv-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
 }
 
 /* =======================================================================================
-   CERTIFICATIONS (3 visibles par défaut, pagination)
+   CERTIFICATIONS
 ======================================================================================= */
 .section-certifications {
     background: var(--bg-main);
 }
 
-/* Grille principale */
 .certifications-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
 }
 
-/* Carte certification */
 .cert-card {
     background: rgba(15, 23, 42, 0.9);
     border-radius: var(--radius);
@@ -303,8 +349,9 @@ body {
     box-shadow: var(--shadow-soft);
 }
 
-.cert-logo img {
-    max-width: 64px;
+.cert-logo {
+    display: flex;
+    justify-content: center;
     margin-bottom: 0.75rem;
 }
 
@@ -314,19 +361,16 @@ body {
     color: var(--text-muted);
 }
 
-/* Masqué (au-delà des 3 premières) */
 .cert-hidden {
     display: none;
 }
 
-/* Boutons voir + pagination */
 .cert-actions {
     margin-top: 1.5rem;
     display: flex;
     justify-content: space-between;
 }
 
-/* pagination */
 .cert-pagination {
     display: flex;
     gap: 0.4rem;
@@ -391,9 +435,45 @@ body {
     background: var(--bg-main);
 }
 
+.section-contact p {
+    color: var(--text-muted);
+}
+
 .contact-form {
     margin-top: 1rem;
     max-width: 480px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-soft);
+    background: rgba(15, 23, 42, 0.9);
+    color: var(--text-main);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: 1px solid var(--accent);
+}
+
+.contact-links {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 /* =======================================================================================
@@ -411,11 +491,15 @@ body {
 @media (max-width: 900px) {
 
     .certifications-list {
-        grid-template-columns: repeat(2, 1fr); /* 2 colonnes pour les certifs */
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .projects-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 colonnes pour les projets */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cv-grid {
+        grid-template-columns: 1fr; /* 1 carte par ligne sur tablette / mobile */
     }
 }
 
@@ -424,7 +508,6 @@ body {
 ======================================================================================= */
 @media (max-width: 768px) {
 
-    /* Navbar devient panneau latéral */
     .header-inner {
         gap: 0.5rem;
     }
@@ -462,7 +545,6 @@ body {
         box-shadow: 0 12px 25px rgba(79, 70, 229, 0.45) !important;
     }
 
-    /* Présentation en une colonne */
     .section-presentation .container {
         grid-template-columns: 1fr;
     }
@@ -471,7 +553,6 @@ body {
         margin: 1.5rem auto 0;
     }
 
-    /* Actions des certifs empilées et centrées */
     .cert-actions {
         flex-direction: column;
         align-items: stretch;
@@ -481,6 +562,19 @@ body {
     .cert-pagination {
         justify-content: center;
     }
+
+    .cv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cv-column {
+        text-align: center;
+    }
+
+    .cv-preview {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 /* =======================================================================================
@@ -489,11 +583,10 @@ body {
 @media (max-width: 600px) {
 
     .certifications-list {
-        grid-template-columns: 1fr; /* 1 colonne pour les certifs */
+        grid-template-columns: 1fr;
     }
 
     .projects-grid {
-        grid-template-columns: 1fr; /* 1 colonne pour les projets */
+        grid-template-columns: 1fr;
     }
 }
-

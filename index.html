@@ -10,7 +10,8 @@
     <!-- HEADER + NAVBAR -->
     <header class="header">
         <div class="container header-inner">
-            <div class="logo">
+            <!-- logo cliquable (retour haut de page) -->
+            <div class="logo" id="logo-link">
                 <span class="logo-init">YH</span>
                 <span class="logo-text">Yassine HAMRI</span>
             </div>
@@ -24,6 +25,7 @@
 
             <nav class="navbar" id="navbar">
                 <ul>
+                    <li><a class="btn-primary nav-btn" href="#presentation">Présentation</a></li>
                     <li><a class="btn-primary nav-btn" href="#cv">CV</a></li>
                     <li><a class="btn-primary nav-btn" href="#certifications">Certifications</a></li>
                     <li><a class="btn-primary nav-btn" href="#projets">Projets</a></li>
@@ -32,7 +34,6 @@
             </nav>
         </div>
     </header>
-
 
     <!-- CONTENU PRINCIPAL -->
     <main>
@@ -44,6 +45,10 @@
                     <h1 id="presentation-title"></h1>
                     <h2 id="presentation-subtitle"></h2>
                     <p id="presentation-description"></p>
+
+                    <!-- tags (optionnels, remplis via JSON si présents) -->
+                    <div class="presentation-tags" id="presentation-tags"></div>
+
                     <button class="btn-primary" id="btn-voir-projets">
                         Voir mes projets
                     </button>
@@ -59,33 +64,38 @@
             <div class="container">
                 <h2>CV</h2>
                 <div class="cv-grid">
-                    <div class="cv-column">
-                        <h3 id="cv-devweb-title">Développement Web</h3>
-                        <p id="cv-devweb-desc">
-                            Orienté front-end / back-end, projets web et UX/UI.
+                    <article class="cert-card cv-card">
+                        <div class="cv-preview">
+                            <img src="assets/img/cv/cv-devweb.png" alt="Aperçu CV Développeur Web">
+                        </div>
+                        <h3 class="cv-title">Développeur Web</h3>
+                        <p class="cv-subtitle">
+                            Orienté front-end / back-end, projets web et portfolio.
                         </p>
                         <a class="btn-secondary cv-link"
                            data-cv-id="devweb"
                            target="_blank">
-                            Télécharger
+                            Voir le CV
                         </a>
-                    </div>
+                    </article>
                 
-                    <div class="cv-column">
-                        <h3 id="cv-data-title">Data Analyse</h3>
-                        <p id="cv-data-desc">
+                    <article class="cert-card cv-card">
+                        <div class="cv-preview">
+                            <img src="assets/img/cv/cv-data-analyst.png" alt="Aperçu CV Data Analyse">
+                        </div>
+                        <h3 class="cv-title">Data Analyse</h3>
+                        <p class="cv-subtitle">
                             Orienté analyses de données, scrapping et visualisation.
                         </p>
                         <a class="btn-secondary cv-link"
                            data-cv-id="data"
                            target="_blank">
-                            Télécharger
+                            Voir le CV
                         </a>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
-
 
 
         <!-- CERTIFICATIONS -->
@@ -94,6 +104,7 @@
                 <h2>Certifications</h2>
             
                 <div class="certifications-list" id="certifications-list">
+                    <!-- JS : cartes de certifications -->
                 </div>
             
                 <div class="cert-actions">
@@ -102,11 +113,11 @@
                     </button>
                 
                     <div class="cert-pagination" id="cert-pagination">
+                        <!-- JS : pagination -->
                     </div>
                 </div>
             </div>
         </section>
-
 
         <!-- PROJETS -->
         <section id="projets" class="section section-projets">
@@ -155,7 +166,7 @@
         </div>
     </footer>
 
-    <!-- JS (plus tard) -->
+    <!-- JS -->
     <script src="assets/js/main.js"></script>
 </body>
 </html>

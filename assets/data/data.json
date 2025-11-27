@@ -2,7 +2,7 @@
   "presentation": {
     "name": "Yassine Hamri",
     "role": "Développeur Junior",
-    "description": "Je suis un développeur passionné par le web, l'automatisation et l'UX...",
+    "description": "Je suis un développeur intérressé par le web, l'automatisation et l'UX/UI",
     "photo": "assets/img/default-profile.png",
     "tags": ["Front-end", "Back-end", "Python", "JavaScript"]
   },
@@ -10,14 +10,14 @@
   "cv": [
     {
       "id": "devweb",
-      "title": "Développeur Web",
+      "title": "Développeur Web Junior",
       "description": "Orienté front-end / back-end, projets web et portfolio.",
       "file": "assets/cv/cv-devweb.pdf"
     },
     {
       "id": "data",
       "title": "Data Analyse",
-      "description": "Orienté analyses de données, scrapping et visualisation.",
+      "description": "Orienté analyses de données, scrapping, automatisations et visualisation.",
       "file": "assets/cv/cv-data-analyst.pdf"
     }
   ],
@@ -55,7 +55,7 @@
 
   "projects": [],
   "contact": {
-    "email": "ton.email@example.com",
+    "email": "yyhamri@gmail.com",
     "links": []
   }
 }

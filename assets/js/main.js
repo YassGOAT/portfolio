@@ -23,13 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
             setupCertifications(data.certifications);
             initProjects(data.projects);
             initContact(data.contact);
-            initCV(data.cv);            // ← ne pas oublier ça !
+            initCV(data.cv);
             initFooterYear();
             initScrollButtons();
             initBurgerMenu();
             initLogoScrollTop();
         })
-
         .catch(error => {
             console.error("Impossible de charger data.json :", error);
         });
@@ -77,24 +76,24 @@ function initPresentation(presentation) {
 }
 
 
-// ==========================
+// =========================================================
 // CV – injection des liens depuis le JSON
-// ==========================
+// =========================================================
+
 function initCV(cvItems) {
     if (!Array.isArray(cvItems)) return;
 
     const links = document.querySelectorAll(".cv-link");
 
     links.forEach(link => {
-        const id = link.dataset.cvId;          // "devweb" ou "data"
+        const id = link.dataset.cvId; // "devweb" ou "data"
         const cvItem = cvItems.find(item => item.id === id);
-
         if (!cvItem) return;
 
-        // Met l'URL du PDF OU de l'image si tu veux tester
+        // URL du PDF
         link.href = cvItem.file;
 
-        // Met à jour les textes si tu veux aussi les gérer via JSON
+        // Mise à jour textes depuis JSON (optionnel mais propre)
         const titleEl = document.getElementById(`cv-${id}-title`);
         const descEl = document.getElementById(`cv-${id}-desc`);
 
@@ -106,9 +105,6 @@ function initCV(cvItems) {
 
 // =========================================================
 // CERTIFICATIONS
-// - 3 visibles par défaut
-// - 9 par page + pagination
-// - bouton Voir plus / Masquer
 // =========================================================
 
 function setupCertifications(certifications) {
@@ -139,7 +135,6 @@ function renderCertificationsPage() {
         const card = document.createElement("article");
         card.classList.add("cert-card");
 
-        // Au-delà de la 3e, marquée pour être masquée par défaut
         if (index >= CERTS_VISIBLE_DEFAULT) {
             card.classList.add("cert-hidden");
         }
