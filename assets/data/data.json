@@ -4,95 +4,58 @@
     "role": "Développeur Junior",
     "description": "Je suis un développeur passionné par le web, l'automatisation et l'UX...",
     "photo": "assets/img/default-profile.png",
-    "tags": [
-      "Front-end",
-      "Back-end",
-      "Python",
-      "JavaScript",
-      "data scraping",
-      "UX/UI"
-    ]
+    "tags": ["Front-end", "Back-end", "Python", "JavaScript"]
   },
 
   "cv": [
     {
       "id": "devweb",
-      "title": "Développement Web",
-      "description": "Orienté front-end / back-end, UX/UI.",
-      "file": "assets/img/cv/cv-devweb.pdf"
+      "title": "Développeur Web",
+      "description": "Orienté front-end / back-end, projets web et portfolio.",
+      "file": "assets/cv/cv-devweb.pdf"
     },
     {
       "id": "data",
       "title": "Data Analyse",
       "description": "Orienté analyses de données, scrapping et visualisation.",
-      "file": "assets/img/cv/cv-data-analyst.pdf"
+      "file": "assets/cv/cv-data-analyst.pdf"
     }
   ],
 
   "certifications": [
     {
-      "title": "Certification Python",
-      "issuer": "OpenClassrooms",
-      "year": 2025,
-      "certificate_url": "#",
+      "title": "Serveur Discord",
+      "issuer": "Perso",
+      "year": 2024,
+      "certificate_url": "",
       "logo": "assets/img/certifications/discord.png"
     },
     {
-      "title": "Certification Python",
-      "issuer": "OpenClassrooms",
-      "year": 2025,
-      "certificate_url": "#",
+      "title": "Serveur Discord",
+      "issuer": "Perso",
+      "year": 2024,
+      "certificate_url": "",
       "logo": "assets/img/certifications/discord.png"
     },
     {
-      "title": "Certification Python",
-      "issuer": "OpenClassrooms",
-      "year": 2025,
-      "certificate_url": "#",
+      "title": "Serveur Discord",
+      "issuer": "Perso",
+      "year": 2024,
+      "certificate_url": "",
       "logo": "assets/img/certifications/discord.png"
     },
     {
-      "title": "Certification Python",
-      "issuer": "OpenClassrooms",
-      "year": 2025,
-      "certificate_url": "#",
+      "title": "Serveur Discord",
+      "issuer": "Perso",
+      "year": 2024,
+      "certificate_url": "",
       "logo": "assets/img/certifications/discord.png"
     }
   ],
 
-  "projects": [
-    {
-      "title": "Portfolio Personnel",
-      "slug": "portfolio",
-      "description": "Un site vitrine moderne et responsive pour présenter mes projets.",
-      "techs": ["HTML", "CSS", "JavaScript", "JSON", "PHP", "MySQL", "Python", "BeautifulSoup", "Requests"],
-      "image": "assets/img/projets/portfolio.png",
-      "github": "https://github.com/ton-profil/portfolio",
-      "demo": "https://ton-portfolio.com"
-    },
-    {
-      "title": "Scraper de citations",
-      "slug": "quotes-scraper",
-      "description": "Un script Python pour scraper des citations et les stocker en base.",
-      "techs": ["Python", "Requests", "BeautifulSoup"],
-      "image": "assets/img/projets/quotes_scraper.png",
-      "github": "https://github.com/ton-profil/quotes-scraper",
-      "demo": ""
-    }
-  ],
-
+  "projects": [],
   "contact": {
-    "email": "ton.email@exemple.com",
-    "location": "Ville, Pays",
-    "links": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/ton-profil"
-      },
-      {
-        "label": "LinkedIn",
-        "url": "https://www.linkedin.com/in/ton-profil/"
-      }
-    ]
+    "email": "ton.email@example.com",
+    "links": []
   }
 }

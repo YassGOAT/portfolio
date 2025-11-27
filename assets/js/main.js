@@ -23,12 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
             setupCertifications(data.certifications);
             initProjects(data.projects);
             initContact(data.contact);
-            initCV(data.cv);
+            initCV(data.cv);            // ← ne pas oublier ça !
             initFooterYear();
             initScrollButtons();
             initBurgerMenu();
             initLogoScrollTop();
         })
+
         .catch(error => {
             console.error("Impossible de charger data.json :", error);
         });
@@ -76,24 +77,24 @@ function initPresentation(presentation) {
 }
 
 
-// =========================================================
-// CV – liens chargés depuis le JSON
-// =========================================================
-
+// ==========================
+// CV – injection des liens depuis le JSON
+// ==========================
 function initCV(cvItems) {
     if (!Array.isArray(cvItems)) return;
 
     const links = document.querySelectorAll(".cv-link");
 
     links.forEach(link => {
-        const id = link.dataset.cvId;
+        const id = link.dataset.cvId;          // "devweb" ou "data"
         const cvItem = cvItems.find(item => item.id === id);
+
         if (!cvItem) return;
 
-        // URL PDF
+        // Met l'URL du PDF OU de l'image si tu veux tester
         link.href = cvItem.file;
 
-        // Optionnel : maj des textes
+        // Met à jour les textes si tu veux aussi les gérer via JSON
         const titleEl = document.getElementById(`cv-${id}-title`);
         const descEl = document.getElementById(`cv-${id}-desc`);
 
