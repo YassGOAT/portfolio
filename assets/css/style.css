@@ -20,6 +20,14 @@ body {
     line-height: 1.6;
 }
 
+.section h2 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
 /* =======================================================================================
    VARIABLES CSS
 ======================================================================================= */
@@ -342,11 +350,10 @@ body {
 }
 
 .cert-card {
-    background: rgba(15, 23, 42, 0.9);
-    border-radius: var(--radius);
-    border: 1px solid var(--border-soft);
-    padding: 1rem;
-    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .cert-logo {
@@ -368,7 +375,9 @@ body {
 .cert-actions {
     margin-top: 1.5rem;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .cert-pagination {
@@ -426,6 +435,11 @@ body {
 
 .project-card-desc {
     color: var(--text-muted);
+}
+
+#btn-voir-projets {
+    display: block;
+    margin: 1.8rem auto 0 auto; /* centre horizontalement */
 }
 
 /* =======================================================================================
@@ -542,6 +556,11 @@ body {
     border-top: 1px solid var(--border-soft);
     padding: 1.5rem 0;
     color: var(--text-muted);
+    text-align: center; /* <-- centrage du texte */
+}
+.footer a {
+    color: var(--accent-light);
+    text-decoration: none;
 }
 
 /* =======================================================================================
@@ -617,10 +636,12 @@ body {
     }
 
     .cert-actions {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
-    }
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
 
     .cert-pagination {
         justify-content: center;
