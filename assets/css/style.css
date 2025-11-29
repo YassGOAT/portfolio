@@ -427,32 +427,192 @@ a {
     gap: 1.75rem;
 }
 
+/* Carte projet */
 .project-card {
     background: rgba(15, 23, 42, 0.9);
     border-radius: var(--radius);
     border: 1px solid var(--border-soft);
     box-shadow: var(--shadow-soft);
     overflow: hidden;
+    padding: 1.1rem 1.2rem 1.4rem;   /* <-- ajoute du padding = espace avec les bords */
 }
+
+.project-carousel {
+    position: relative;
+    width: 100%;
+    height: 260px;                 /* hauteur fixe */
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--border-soft);
+    margin-bottom: 1rem;
+}
+
+/* Bande d’images */
+.project-carousel-inner {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+/* Chaque image prend toute la place */
+.project-carousel-inner img {
+    width: 100%;
+    height: 100%;                  /* <-- très important */
+    object-fit: cover;             /* remplit sans laisser de vide */
+    flex-shrink: 0;
+    display: block;
+}
+
+/* Boutons précédent / suivant */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #fff;
+    padding: 0.3rem 0.55rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: 0.2s ease;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.carousel-prev {
+    left: 8px;
+}
+
+.carousel-next {
+    right: 8px;
+}
+
 
 .project-card img {
     width: 100%;
-    height: 160px;
+    height: 100%;
     object-fit: cover;
 }
 
 .project-card-body {
-    padding: 1rem;
+    padding: 1.1rem 0.2rem 0;  /* léger padding interne */
 }
 
+/* Titre du projet */
+.project-card-title {
+    margin-bottom: 0.4rem;
+}
+
+/* Description */
 .project-card-desc {
     color: var(--text-muted);
+    margin-bottom: 0.8rem;      /* espace sous le texte */
 }
+
+/* Ligne des technos */
+.project-card-techs {
+    font-size: 0.9rem;
+    color: var(--accent-light);
+    margin-bottom: 1rem;        /* espace avant le bouton */
+}
+
+/* Zone des boutons (GitHub / Démo) */
+.project-card-links {
+    display: flex;
+    justify-content: center;    /* bouton centré */
+    margin-top: 0.2rem;
+}
+
 
 #btn-voir-projets {
     display: block;
     margin: 1.8rem auto 0 auto; /* centre horizontalement */
 }
+
+/* ==========================
+   MODAL PROJET (plein écran)
+========================== */
+.project-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.project-modal.active {
+    display: flex;
+}
+
+.project-modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: #050816;
+    border-radius: 12px;
+    border: 1px solid var(--border-soft);
+    padding: 0.75rem;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-modal-img-wrapper {
+    max-width: 100%;
+    max-height: 80vh;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.project-modal-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.project-modal-title {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* Boutons du modal */
+.project-modal-close,
+.project-modal-prev,
+.project-modal-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: #fff;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.project-modal-close {
+    top: 10px;
+    right: 10px;
+    transform: none;
+}
+
+.project-modal-prev {
+    left: 10px;
+}
+
+.project-modal-next {
+    right: 10px;
+}
+
 
 /* =======================================================================================
    CONTACT

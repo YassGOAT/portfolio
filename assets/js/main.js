@@ -8,6 +8,106 @@ let CURRENT_CERT_PAGE = 1;
 const CERTS_PER_PAGE = 9;
 const CERTS_VISIBLE_DEFAULT = 3;
 
+// =========================================================
+// MODAL PROJET (plein écran)
+// =========================================================
+
+let projectModal,
+    projectModalImg,
+    projectModalTitle,
+    projectModalPrev,
+    projectModalNext,
+    projectModalImages = [],
+    projectModalIndex = 0;
+
+function initProjectModal() {
+    projectModal = document.createElement("div");
+    projectModal.classList.add("project-modal");
+    projectModal.id = "project-modal";
+
+    const content = document.createElement("div");
+    content.classList.add("project-modal-content");
+
+    // wrapper image
+    const imgWrapper = document.createElement("div");
+    imgWrapper.classList.add("project-modal-img-wrapper");
+    projectModalImg = document.createElement("img");
+    imgWrapper.appendChild(projectModalImg);
+
+    // titre
+    projectModalTitle = document.createElement("div");
+    projectModalTitle.classList.add("project-modal-title");
+
+    // boutons
+    const closeBtn = document.createElement("button");
+    closeBtn.classList.add("project-modal-close");
+    closeBtn.textContent = "✕";
+    closeBtn.addEventListener("click", closeProjectModal);
+
+    projectModalPrev = document.createElement("button");
+    projectModalPrev.classList.add("project-modal-prev");
+    projectModalPrev.textContent = "‹";
+    projectModalPrev.addEventListener("click", () => {
+        changeProjectModalImage(-1);
+    });
+
+    projectModalNext = document.createElement("button");
+    projectModalNext.classList.add("project-modal-next");
+    projectModalNext.textContent = "›";
+    projectModalNext.addEventListener("click", () => {
+        changeProjectModalImage(1);
+    });
+
+    content.appendChild(imgWrapper);
+    content.appendChild(projectModalTitle);
+    content.appendChild(closeBtn);
+    content.appendChild(projectModalPrev);
+    content.appendChild(projectModalNext);
+
+    projectModal.appendChild(content);
+
+    // clic sur le fond = fermer
+    projectModal.addEventListener("click", (e) => {
+        if (e.target === projectModal) {
+            closeProjectModal();
+        }
+    });
+
+    document.body.appendChild(projectModal);
+}
+
+function openProjectModal(project, startIndex = 0) {
+    projectModalImages = Array.isArray(project.images) ? project.images : [];
+    if (projectModalImages.length === 0) return;
+
+    projectModalIndex = startIndex;
+    projectModalTitle.textContent = project.title || "";
+    updateProjectModalImage();
+    projectModal.classList.add("active");
+}
+
+function closeProjectModal() {
+    if (!projectModal) return;
+    projectModal.classList.remove("active");
+}
+
+function changeProjectModalImage(direction) {
+    if (projectModalImages.length === 0) return;
+    projectModalIndex =
+        (projectModalIndex + direction + projectModalImages.length) %
+        projectModalImages.length;
+    updateProjectModalImage();
+}
+
+function updateProjectModalImage() {
+    if (!projectModalImg || projectModalImages.length === 0) return;
+    projectModalImg.src = projectModalImages[projectModalIndex];
+}
+
+// =========================================================
+// DOMContentLoaded
+// =========================================================
+
 document.addEventListener("DOMContentLoaded", () => {
     const DATA_URL = "assets/data/data.json";
 
@@ -21,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             initPresentation(data.presentation);
             setupCertifications(data.certifications);
+            initProjectModal();            // <-- initialisation du modal projet
             initProjects(data.projects);
             initContact(data.contact);
             initCV(data.cv);
@@ -285,14 +386,69 @@ function initProjects(projects) {
         const card = document.createElement("article");
         card.classList.add("project-card");
 
-        if (project.image) {
-            const img = document.createElement("img");
-            img.src = project.image;
-            img.alt = `Aperçu du projet ${project.title || ""}`.trim();
-            img.loading = "lazy";
-            card.appendChild(img);
+        /* ==========================
+           CARROUSEL D'IMAGES
+        ========================== */
+        if (Array.isArray(project.images) && project.images.length > 0) {
+            const carousel = document.createElement("div");
+            carousel.classList.add("project-carousel");
+
+            const inner = document.createElement("div");
+            inner.classList.add("project-carousel-inner");
+
+            project.images.forEach((src, index) => {
+                const img = document.createElement("img");
+                img.src = src;
+                img.alt = project.title || "Image du projet";
+                img.loading = "lazy";
+
+                // ouverture du modal sur clic
+                img.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    openProjectModal(project, index);
+                });
+
+                inner.appendChild(img);
+            });
+
+            carousel.appendChild(inner);
+
+            // Boutons prev / next
+            const btnPrev = document.createElement("button");
+            btnPrev.classList.add("carousel-btn", "carousel-prev");
+            btnPrev.innerHTML = "‹";
+
+            const btnNext = document.createElement("button");
+            btnNext.classList.add("carousel-btn", "carousel-next");
+            btnNext.innerHTML = "›";
+
+            carousel.appendChild(btnPrev);
+            carousel.appendChild(btnNext);
+
+            // Logique de défilement dans la carte
+            let position = 0;
+            const maxIndex = project.images.length - 1;
+
+            const updateCarousel = () => {
+                inner.style.transform = `translateX(-${position * 100}%)`;
+            };
+
+            btnNext.addEventListener("click", () => {
+                position = (position + 1 > maxIndex) ? 0 : position + 1;
+                updateCarousel();
+            });
+
+            btnPrev.addEventListener("click", () => {
+                position = (position - 1 < 0) ? maxIndex : position - 1;
+                updateCarousel();
+            });
+
+            card.appendChild(carousel);
         }
 
+        /* ==========================
+           CONTENU TEXTE
+        ========================== */
         const body = document.createElement("div");
         body.classList.add("project-card-body");
 
@@ -318,7 +474,7 @@ function initProjects(projects) {
             githubLink.href = project.github;
             githubLink.target = "_blank";
             githubLink.rel = "noopener noreferrer";
-            githubLink.textContent = "GitHub";
+            githubLink.textContent = "Voir le dépôt GitHub";
             githubLink.classList.add("btn-secondary");
             linksWrapper.appendChild(githubLink);
         }
@@ -361,10 +517,10 @@ function initContact(contact) {
     const statusEl = document.getElementById("contact-status");
     const linksContainer = document.getElementById("contact-links");
 
-    // E-mail → bouton cliquable
+    // E-mail → bouton cliquable (Gmail web)
     if (emailEl && contact.email) {
         emailEl.textContent = contact.email;
-        emailEl.href = `https://mail.google.com/mail/?view=cm&to=${contact.email}`;
+        emailEl.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${contact.email}`;
         emailEl.target = "_blank";
     }
 

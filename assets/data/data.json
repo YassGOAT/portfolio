@@ -59,11 +59,11 @@
       "title": "Scraping des statistiques NHL – ScrapeThisSite",
       "description": "Un script Python complet qui extrait toutes les statistiques des équipes NHL depuis ScrapeThisSite : résultats, victoires, défaites, pourcentage de victoire, goals et plus. Le programme gère toute la pagination, nettoie les données et exporte un CSV final complet.",
       "images": [
-        "assets/img/projects/scrapethissite-hockey/1.png",
-        "assets/img/projects/scrapethissite-hockey/2.png",
-        "assets/img/projects/scrapethissite-hockey/3.png",
-        "assets/img/projects/scrapethissite-hockey/4.png",
-        "assets/img/projects/scrapethissite-hockey/siteView.png"
+        "assets/img/projets/scrapethissite-hockey/1.png",
+        "assets/img/projets/scrapethissite-hockey/2.png",
+        "assets/img/projets/scrapethissite-hockey/3.png",
+        "assets/img/projets/scrapethissite-hockey/4.png",
+        "assets/img/projets/scrapethissite-hockey/siteView.png"
       ],
       "techs": [
         "Python",
@@ -76,11 +76,40 @@
       "demo": ""
     },
     {
-      "title": "Dashboard Data Analyst",
-      "description": "Dashboard interactif permettant la visualisation de datasets avec des filtres avancés.",
-      "image": "assets/img/projects/dashboard.png",
-      "techs": ["Python", "Pandas", "Matplotlib"],
-      "github": "https://github.com/ton-profil/dashboard-data",
+      "id": "books-toscrape",
+      "title": "Scraping complet des livres – BooksToScrape",
+      "description": "Un scraper Python qui parcourt toutes les pages de BooksToScrape, suit chaque fiche produit et extrait un dataset complet : titre, catégorie, prix HT/TTC, disponibilité, rating, UPC, description, URL produit et URL image. Les données sont nettoyées puis exportées dans un fichier CSV exploitable.",
+      "images": [
+        "assets/img/projects/books-toscrape/1.png",
+        "assets/img/projects/books-toscrape/2.png",
+        "assets/img/projects/books-toscrape/3.png"
+      ],
+      "techs": [
+        "Python",
+        "Requests",
+        "BeautifulSoup",
+        "CSV",
+        "Web Scraping"
+      ],
+      "github": "https://github.com/ton-github/books-toscrape-scraper",
+      "demo": ""
+    },
+    {
+      "id": "quotes-toscrape",
+      "title": "Scraping des citations – QuotesToScrape",
+      "description": "Un script Python qui récupère automatiquement toutes les citations du site QuotesToScrape : texte, auteur et tags associés. Le programme suit la pagination jusqu’à la dernière page, applique un léger nettoyage et génère un fichier CSV propre pour analyse ou visualisation.",
+      "images": [
+        "assets/img/projects/quotes-toscrape/1.png",
+        "assets/img/projects/quotes-toscrape/2.png"
+      ],
+      "techs": [
+        "Python",
+        "Requests",
+        "BeautifulSoup",
+        "CSV",
+        "Web Scraping"
+      ],
+      "github": "https://github.com/ton-github/quotes-toscrape-scraper",
       "demo": ""
     }
   ],
