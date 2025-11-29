@@ -59,11 +59,11 @@
       "title": "Scraping des statistiques NHL – ScrapeThisSite",
       "description": "Un script Python complet qui extrait toutes les statistiques des équipes NHL depuis ScrapeThisSite : résultats, victoires, défaites, pourcentage de victoire, goals et plus. Le programme gère toute la pagination, nettoie les données et exporte un CSV final complet.",
       "images": [
+        "assets/img/projets/scrapethissite-hockey/csv_result.png",
         "assets/img/projets/scrapethissite-hockey/readme.png",
         "assets/img/projets/scrapethissite-hockey/view_code_1.png",
         "assets/img/projets/scrapethissite-hockey/view_code_2.png",
         "assets/img/projets/scrapethissite-hockey/view_code_3.png",
-        "assets/img/projets/scrapethissite-hockey/csv_result.png",
         "assets/img/projets/scrapethissite-hockey/siteView.png"
       ],
       "techs": [
@@ -80,10 +80,10 @@
       "title": "Scraping complet des livres – BooksToScrape",
       "description": "Un scraper Python qui parcourt toutes les pages de BooksToScrape, suit chaque fiche produit et extrait un dataset complet : titre, catégorie, prix HT/TTC, disponibilité, rating, UPC, description, URL produit et URL image. Les données sont nettoyées puis exportées dans un fichier CSV exploitable.",
       "images": [
+        "assets/img/projets/books-toscrape/dico_result.png",
         "assets/img/projets/books-toscrape/readme.png",
         "assets/img/projets/books-toscrape/view_code_1.png",
         "assets/img/projets/books-toscrape/view_code_2.png",
-        "assets/img/projets/books-toscrape/dico_result.png",
         "assets/img/projets/books-toscrape/siteView.png"
       ],
       "techs": [
