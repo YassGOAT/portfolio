@@ -8,6 +8,11 @@ let CURRENT_CERT_PAGE = 1;
 const CERTS_PER_PAGE = 9;
 const CERTS_VISIBLE_DEFAULT = 3;
 
+// Config projets
+let PROJECTS_DATA = [];
+const PROJECTS_VISIBLE_DEFAULT = 2;
+
+
 // =========================================================
 // MODAL PROJET (plein écran)
 // =========================================================
@@ -380,11 +385,17 @@ function initProjects(projects) {
     const grid = document.getElementById("projects-grid");
     if (!grid || !Array.isArray(projects)) return;
 
+    PROJECTS_DATA = projects;
     grid.innerHTML = "";
 
-    projects.forEach(project => {
+    PROJECTS_DATA.forEach((project, index) => {
         const card = document.createElement("article");
         card.classList.add("project-card");
+
+        // On masque ceux après les 2 premiers
+        if (index >= PROJECTS_VISIBLE_DEFAULT) {
+            card.classList.add("project-hidden");
+        }
 
         /* ==========================
            CARROUSEL D'IMAGES
@@ -396,16 +407,15 @@ function initProjects(projects) {
             const inner = document.createElement("div");
             inner.classList.add("project-carousel-inner");
 
-            project.images.forEach((src, index) => {
+            project.images.forEach((src, imgIndex) => {
                 const img = document.createElement("img");
                 img.src = src;
                 img.alt = project.title || "Image du projet";
                 img.loading = "lazy";
 
-                // ouverture du modal sur clic
                 img.addEventListener("click", (e) => {
                     e.stopPropagation();
-                    openProjectModal(project, index);
+                    openProjectModal(project, imgIndex);
                 });
 
                 inner.appendChild(img);
@@ -413,7 +423,6 @@ function initProjects(projects) {
 
             carousel.appendChild(inner);
 
-            // Boutons prev / next
             const btnPrev = document.createElement("button");
             btnPrev.classList.add("carousel-btn", "carousel-prev");
             btnPrev.innerHTML = "‹";
@@ -425,7 +434,6 @@ function initProjects(projects) {
             carousel.appendChild(btnPrev);
             carousel.appendChild(btnNext);
 
-            // Logique de défilement dans la carte
             let position = 0;
             const maxIndex = project.images.length - 1;
 
@@ -500,6 +508,52 @@ function initProjects(projects) {
 
         card.appendChild(body);
         grid.appendChild(card);
+    });
+
+    setupProjectsToggle();
+}
+
+function setupProjectsToggle() {
+    const toggleBtn = document.getElementById("projects-toggle-btn");
+    const grid = document.getElementById("projects-grid");
+    if (!toggleBtn || !grid) return;
+
+    const cards = grid.querySelectorAll(".project-card");
+
+    // S'il y a 2 projets ou moins, pas besoin de bouton
+    if (cards.length <= PROJECTS_VISIBLE_DEFAULT) {
+        toggleBtn.style.display = "none";
+        return;
+    }
+
+    toggleBtn.style.display = "inline-flex";
+    toggleBtn.textContent = "Voir plus";
+    toggleBtn.dataset.expanded = "false";
+
+    // On s'assure que ceux après les 2 premiers sont cachés au départ
+    cards.forEach((card, index) => {
+        if (index >= PROJECTS_VISIBLE_DEFAULT) {
+            card.classList.add("project-hidden");
+        }
+    });
+
+    toggleBtn.addEventListener("click", () => {
+        const isExpanded = toggleBtn.dataset.expanded === "true";
+        const hiddenCards = grid.querySelectorAll(".project-card.project-hidden");
+
+        if (!isExpanded) {
+            hiddenCards.forEach(card => {
+                card.style.display = "block";
+            });
+            toggleBtn.textContent = "Masquer";
+            toggleBtn.dataset.expanded = "true";
+        } else {
+            hiddenCards.forEach(card => {
+                card.style.display = "none";
+            });
+            toggleBtn.textContent = "Voir plus";
+            toggleBtn.dataset.expanded = "false";
+        }
     });
 }
 

@@ -73,8 +73,7 @@
         "CSV",
         "Web Scraping"
       ],
-      "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/BookToScrape",
-      "demo": ""
+      "github": "https://github.com/YassGOAT/python_projects/tree/ef947836d1c1ac67e8291cd3f84cc20061aca020/ScrapeThisSite"
     },
     {
       "id": "books-toscrape",
@@ -94,8 +93,7 @@
         "CSV",
         "Web Scraping"
       ],
-      "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/BookToScrape",
-      "demo": ""
+      "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/BookToScrape"
     },
     {
       "id": "quotes-toscrape",
@@ -114,8 +112,7 @@
         "CSV",
         "Web Scraping"
       ],
-      "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/QuotesToScrape",
-      "demo": ""
+      "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/QuotesToScrape"
     }
   ],
 

@@ -423,8 +423,20 @@ a {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
     gap: 1.75rem;
+}
+
+/* Cacher les projets masqués */
+.project-hidden {
+    display: none;
+}
+
+/* Bouton Voir plus des projets */
+.projects-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
 }
 
 /* Carte projet */
@@ -745,7 +757,7 @@ a {
     }
 
     .projects-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr;
     }
 
     .cv-grid {
