@@ -4,7 +4,7 @@
     "role": "Développeur Junior",
     "description": "Je suis un développeur intérressé par le web, l'automatisation et l'UX/UI",
     "photo": "assets/img/icons/default-profile.png",
-    "tags": ["Front-end", "Back-end", "Python", "JavaScript"]
+    "tags": ["Front-end", "Back-end", "Python", "JavaScript", "Data Analyse", "Web Scraping", "UX/UI"]
   },
 
   "cv": [
@@ -53,7 +53,37 @@
     }
   ],
 
-  "projects": [],
+  "projects": [
+    {
+      "id": "scrapethissite-hockey",
+      "title": "Scraping des statistiques NHL – ScrapeThisSite",
+      "description": "Un script Python complet qui extrait toutes les statistiques des équipes NHL depuis ScrapeThisSite : résultats, victoires, défaites, pourcentage de victoire, goals et plus. Le programme gère toute la pagination, nettoie les données et exporte un CSV final complet.",
+      "images": [
+        "assets/img/projects/scrapethissite-hockey/1.png",
+        "assets/img/projects/scrapethissite-hockey/2.png",
+        "assets/img/projects/scrapethissite-hockey/3.png",
+        "assets/img/projects/scrapethissite-hockey/4.png",
+        "assets/img/projects/scrapethissite-hockey/siteView.png"
+      ],
+      "techs": [
+        "Python",
+        "Requests",
+        "BeautifulSoup",
+        "CSV",
+        "Web Scraping"
+      ],
+      "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/BookToScrape",
+      "demo": ""
+    },
+    {
+      "title": "Dashboard Data Analyst",
+      "description": "Dashboard interactif permettant la visualisation de datasets avec des filtres avancés.",
+      "image": "assets/img/projects/dashboard.png",
+      "techs": ["Python", "Pandas", "Matplotlib"],
+      "github": "https://github.com/ton-profil/dashboard-data",
+      "demo": ""
+    }
+  ],
 
   "contact": {
     "email": "yyhamri@gmail.com",

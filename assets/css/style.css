@@ -114,7 +114,7 @@ a {
 .navbar ul {
     list-style: none;
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 /* =======================================================================================
@@ -305,6 +305,12 @@ a {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 16px;
+    border: 1px solid rgba(129, 131, 255, 0.45);
+    box-shadow: 0 0 20px rgba(129, 131, 255, 0.1);
+    padding: 1rem 1.25rem;
+    transition: 0.25s ease;
 }
 
 /* Aperçu d’un CV dans la carte */
@@ -354,6 +360,12 @@ a {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 16px;
+    border: 1px solid rgba(129, 131, 255, 0.45);
+    box-shadow: 0 0 20px rgba(129, 131, 255, 0.1);
+    padding: 1rem;
+    transition: 0.25s ease;
 }
 
 .cert-logo {
