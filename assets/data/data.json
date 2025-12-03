@@ -24,32 +24,46 @@
 
   "certifications": [
     {
-      "title": "Serveur Discord",
-      "issuer": "Perso",
-      "year": 2024,
-      "certificate_url": "",
-      "logo": "assets/img/certifications/discord.png"
+      "title": "Apprenez à programmer avec JavaScript",
+      "issuer": "OpenClassrooms",
+      "year": 2025,
+      "certificate_url": "https://openclassrooms.com/fr/courses/7696886-apprenez-a-programmer-avec-javascript",
+      "logo": "assets/img/certifications/javascript_certif.png"
     },
     {
-      "title": "Serveur Discord",
-      "issuer": "Perso",
-      "year": 2024,
-      "certificate_url": "",
-      "logo": "assets/img/certifications/discord.png"
+      "title": "Créez votre site web avec HTML5 et CSS3",
+      "issuer": "OpenClassrooms",
+      "year": 2025,
+      "certificate_url": "https://openclassrooms.com/fr/courses/1603881-creez-votre-site-web-avec-html5-et-css3",
+      "logo": "assets/img/certifications/html_css_certif.png"
     },
     {
-      "title": "Serveur Discord",
-      "issuer": "Perso",
-      "year": 2024,
-      "certificate_url": "",
-      "logo": "assets/img/certifications/discord.png"
+      "title": "Apprenez les bases du langage Python",
+      "issuer": "OpenClassrooms",
+      "year": 2025,
+      "certificate_url": "https://openclassrooms.com/fr/courses/7168871-apprenez-les-bases-du-langage-python",
+      "logo": "assets/img/certifications/python_certif.png"
     },
     {
-      "title": "Serveur Discord",
-      "issuer": "Perso",
-      "year": 2024,
-      "certificate_url": "",
-      "logo": "assets/img/certifications/discord.png"
+      "title": "Débutez avec React",
+      "issuer": "OpenClassrooms",
+      "year": 2025,
+      "certificate_url": "https://openclassrooms.com/fr/courses/7008001-debutez-avec-react",
+      "logo": "assets/img/certifications/react_certif.png"
+    },
+    {
+      "title": "Utilisez ChatGPT pour améliorer votre productivité",
+      "issuer": "OpenClassrooms",
+      "year": 2025,
+      "certificate_url": "https://openclassrooms.com/fr/courses/8204091-utilisez-chatgpt-pour-ameliorer-votre-productivite",
+      "logo": "assets/img/certifications/chatgpt_certif.png"
+    },
+    {
+      "title": "Concevez votre site web avec PHP et MySQL",
+      "issuer": "OpenClassrooms",
+      "year": 2025,
+      "certificate_url": "https://openclassrooms.com/fr/courses/918836-concevez-votre-site-web-avec-php-et-mysql",
+      "logo": "assets/img/certifications/php_mysql_certif.png"
     }
   ],
 
