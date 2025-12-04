@@ -386,7 +386,7 @@ a {
 }
 
 .cert-logo img {
-    max-width: 260px;   /* taille de l’image */
+    max-width: 100%px;   /* taille de l’image */
     width: 100%;
     height: auto;
     object-fit: contain;
@@ -405,18 +405,15 @@ a {
     color: var(--text-muted);
 }
 
-/* Bouton toujours centré */
 .cert-card .btn-secondary {
     align-self: center;
     margin-top: 1rem;
 }
 
-/* Cartes masquées pour le "Voir plus" */
 .cert-hidden {
     display: none;
 }
 
-/* Zone du bouton Voir plus */
 .cert-actions {
     margin-top: 1.5rem;
     display: flex;
