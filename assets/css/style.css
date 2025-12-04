@@ -350,9 +350,10 @@ a {
 }
 
 #certifications-list {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(260px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 1.75rem;
+    width: 100%;
 }
 
 .cert-card {
