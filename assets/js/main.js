@@ -210,70 +210,68 @@ function initCV(cvItems) {
 
 
 // =========================================================
-// CERTIFICATIONS
+// CERTIFICATIONS – même logique que PROJETS
 // =========================================================
 
 function setupCertifications(certifications) {
     if (!Array.isArray(certifications)) return;
 
     CERTIFICATIONS_DATA = certifications;
-    CURRENT_CERT_PAGE = 1;
-
-    renderCertificationsPage();
-    renderCertificationsPagination();
+    renderCertifications();
     setupCertificationsToggle();
 }
 
-function getCertificationsForCurrentPage() {
-    const startIndex = (CURRENT_CERT_PAGE - 1) * CERTS_PER_PAGE;
-    const endIndex = startIndex + CERTS_PER_PAGE;
-    return CERTIFICATIONS_DATA.slice(startIndex, endIndex);
-}
-
-function renderCertificationsPage() {
+function renderCertifications() {
     const container = document.getElementById("certifications-list");
     if (!container) return;
 
-    const certsPage = getCertificationsForCurrentPage();
     container.innerHTML = "";
 
-    certsPage.forEach((cert, index) => {
+    CERTIFICATIONS_DATA.forEach((cert, index) => {
         const card = document.createElement("article");
         card.classList.add("cert-card");
 
+        // On cache celles au-delà du seuil
         if (index >= CERTS_VISIBLE_DEFAULT) {
             card.classList.add("cert-hidden");
         }
 
-        const logo = document.createElement("div");
-        logo.classList.add("cert-logo");
-
+        // Logo
         if (cert.logo) {
+            const logo = document.createElement("div");
+            logo.classList.add("cert-logo");
+
             const img = document.createElement("img");
             img.src = cert.logo;
             img.alt = `Logo ${cert.issuer || ""}`.trim();
             img.loading = "lazy";
+
             logo.appendChild(img);
+            card.appendChild(logo);
         }
 
+        // Titre
         const title = document.createElement("h3");
         title.textContent = cert.title || "Certification";
+        card.appendChild(title);
 
-        const issuer = document.createElement("p");
-        issuer.classList.add("cert-issuer");
-        issuer.textContent = cert.issuer || "";
-
-        const year = document.createElement("p");
-        year.classList.add("cert-year");
-        if (cert.year) {
-            year.textContent = `Année : ${cert.year}`;
+        // Issuer
+        if (cert.issuer) {
+            const issuer = document.createElement("p");
+            issuer.classList.add("cert-issuer");
+            issuer.textContent = cert.issuer;
+            card.appendChild(issuer);
         }
 
-        if (cert.logo) card.appendChild(logo);
-        card.appendChild(title);
-        if (cert.issuer) card.appendChild(issuer);
-        if (cert.year) card.appendChild(year);
+        // Année
+        if (cert.year) {
+            const year = document.createElement("p");
+            year.classList.add("cert-year");
+            year.textContent = `Année : ${cert.year}`;
+            card.appendChild(year);
+        }
 
+        // Lien certificat / cours
         if (cert.certificate_url) {
             const link = document.createElement("a");
             link.href = cert.certificate_url;
@@ -290,65 +288,27 @@ function renderCertificationsPage() {
     resetCertToggleButton();
 }
 
-function renderCertificationsPagination() {
-    const paginationContainer = document.getElementById("cert-pagination");
-    if (!paginationContainer) return;
-
-    const totalCerts = CERTIFICATIONS_DATA.length;
-    const totalPages = Math.ceil(totalCerts / CERTS_PER_PAGE);
-
-    paginationContainer.innerHTML = "";
-
-    if (totalPages <= 1) {
-        paginationContainer.style.display = "none";
-        return;
-    }
-
-    paginationContainer.style.display = "flex";
-
-    for (let page = 1; page <= totalPages; page++) {
-        const btn = document.createElement("button");
-        btn.textContent = page;
-        btn.classList.add("cert-page-btn");
-        if (page === CURRENT_CERT_PAGE) {
-            btn.classList.add("active");
-        }
-
-        btn.addEventListener("click", () => {
-            CURRENT_CERT_PAGE = page;
-            renderCertificationsPage();
-            renderCertificationsPagination();
-        });
-
-        paginationContainer.appendChild(btn);
-    }
-}
-
 function setupCertificationsToggle() {
     const toggleBtn = document.getElementById("cert-toggle-btn");
-    if (!toggleBtn) return;
+    const container = document.getElementById("certifications-list");
+    if (!toggleBtn || !container) return;
 
     toggleBtn.addEventListener("click", () => {
-        const container = document.getElementById("certifications-list");
-        if (!container) return;
-
-        const hiddenCards = container.querySelectorAll(".cert-hidden");
-        if (hiddenCards.length === 0) return;
-
         const isExpanded = toggleBtn.dataset.expanded === "true";
+        const hiddenCards = container.querySelectorAll(".cert-card.cert-hidden");
 
-        if (isExpanded) {
-            hiddenCards.forEach(card => {
-                card.style.display = "none";
-            });
-            toggleBtn.textContent = "Voir plus";
-            toggleBtn.dataset.expanded = "false";
-        } else {
+        if (!isExpanded) {
             hiddenCards.forEach(card => {
                 card.style.display = "block";
             });
             toggleBtn.textContent = "Masquer";
             toggleBtn.dataset.expanded = "true";
+        } else {
+            hiddenCards.forEach(card => {
+                card.style.display = "none";
+            });
+            toggleBtn.textContent = "Voir plus";
+            toggleBtn.dataset.expanded = "false";
         }
     });
 }
@@ -361,12 +321,14 @@ function resetCertToggleButton() {
     const cards = container.querySelectorAll(".cert-card");
     const hiddenCards = container.querySelectorAll(".cert-card.cert-hidden");
 
+    // Si 3 certifs ou moins → pas de bouton
     if (cards.length <= CERTS_VISIBLE_DEFAULT || hiddenCards.length === 0) {
         toggleBtn.style.display = "none";
         toggleBtn.dataset.expanded = "false";
         return;
     }
 
+    // État initial : voir plus, cartes au-delà de 3 cachées
     toggleBtn.style.display = "inline-flex";
     toggleBtn.textContent = "Voir plus";
     toggleBtn.dataset.expanded = "false";
@@ -375,7 +337,6 @@ function resetCertToggleButton() {
         card.style.display = "none";
     });
 }
-
 
 // =========================================================
 // PROJETS
