@@ -114,7 +114,7 @@ a {
 /* NAVBAR */
 .navbar {
     display: flex;
-    margin-left: auto;          /* force la navbar à coller au bord droit du header */
+    margin-bottom: auto;          /* force la navbar à coller au bord droit du header */
 }
 
 .navbar ul {
