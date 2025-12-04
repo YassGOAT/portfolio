@@ -250,11 +250,13 @@ a {
 .presentation-photo img {
     width: 260px;
     max-width: 100%;
-    border-radius: 999px;
+    border-radius: 1000px;
     border: 2px solid var(--border-soft);
     box-shadow: var(--shadow-soft);
     object-fit: cover;
     margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 /* =======================================================================================
@@ -759,18 +761,17 @@ a {
 ======================================================================================= */
 @media (max-width: 900px) {
 
-    #certifications-list {
-        grid-template-columns: 1fr;
-    }
-
+    /* Projets : 1 carte par ligne */
     .projects-grid {
         grid-template-columns: 1fr;
     }
 
+    /* CV : 1 carte par ligne */
     .cv-grid {
-        grid-template-columns: 1fr; /* 1 carte par ligne sur tablette / mobile */
+        grid-template-columns: 1fr;
     }
 
+    /* Contact : 1 colonne */
     .contact-grid {
         grid-template-columns: 1fr;
     }
@@ -789,28 +790,36 @@ a {
         display: flex;
     }
 
+    /* NAVBAR : menu déroulant sous le header */
     .navbar {
-        position: fixed;
-        top: 64px;
-        right: -100%;
-        width: 70%;
-        height: calc(100vh - 64px);
+        position: absolute;
+        top: 64px; /* juste sous le header */
+        left: 0;
+        width: 100%;
         background: rgba(5, 8, 22, 0.95);
         backdrop-filter: blur(14px);
-        border-left: 1px solid var(--border-soft);
+        border-bottom: 1px solid var(--border-soft);
+        padding: 1.2rem 0;
         flex-direction: column;
-        padding: 2rem;
-        transition: right 0.35s ease;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-10px);
+        transition: 0.35s ease;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
     }
 
     .navbar.active {
-        right: 0;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
     }
 
     .navbar ul {
         flex-direction: column;
         gap: 1.2rem;
+        width: 100%;
+        align-items: center;
     }
 
     .nav-btn {
@@ -818,6 +827,7 @@ a {
         box-shadow: 0 12px 25px rgba(79, 70, 229, 0.45) !important;
     }
 
+    /* Présentation : une seule colonne */
     .section-presentation .container {
         grid-template-columns: 1fr;
     }
@@ -826,18 +836,15 @@ a {
         margin: 1.5rem auto 0;
     }
 
+    /* Bouton Voir plus certifications centré */
     .cert-actions {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-    .cert-pagination {
+        margin-top: 1.5rem;
+        display: flex;
         justify-content: center;
+        gap: 0.75rem;
     }
 
+    /* CV : centrage du contenu */
     .cv-grid {
         grid-template-columns: 1fr;
     }
@@ -857,10 +864,7 @@ a {
 ======================================================================================= */
 @media (max-width: 600px) {
 
-    .certifications-list {
-        grid-template-columns: 1fr;
-    }
-
+    /* Projets : une seule colonne (redondant mais safe) */
     .projects-grid {
         grid-template-columns: 1fr;
     }
