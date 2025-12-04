@@ -133,10 +133,11 @@
       "title": "Blackjack Web",
       "description": "Une application web de jeu de Blackjack développée en Python reposant sur la Programmation Orientée Objet (POO). Le projet intègre Flask pour le backend, HTML/CSS/JavaScript pour le frontend, et offre une expérience utilisateur fluide avec des fonctionnalités interactives telles que la gestion des mains et les mises.",
       "images": [
-        "assets/img/projets/blackjack_poo/readme.png",
+        "assets/img/projets/blackjack_poo/siteView_1.png",
+        "assets/img/projets/blackjack_poo/siteView_2.png",
         "assets/img/projets/blackjack_poo/view_code_1.png",
         "assets/img/projets/blackjack_poo/view_code_2.png",
-        "assets/img/projets/blackjack_poo/siteView.png"
+        "assets/img/projets/blackjack_poo/view_code_3.png"
       ],
       "techs": [
         "HTML",
