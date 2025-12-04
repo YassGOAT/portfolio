@@ -6,7 +6,7 @@
 let CERTIFICATIONS_DATA = [];
 let CURRENT_CERT_PAGE = 1;
 const CERTS_PER_PAGE = 9;
-const CERTS_VISIBLE_DEFAULT = 3;
+const CERTS_VISIBLE_DEFAULT = 2;
 
 // Config projets
 let PROJECTS_DATA = [];
