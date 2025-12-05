@@ -104,7 +104,7 @@
         "HTML",
         "CSS",
         "JavaScript",
-        "python",
+        "Python",
         "POO",
         "Flask",
         "Web Development",
@@ -148,6 +148,29 @@
         "BeautifulSoup",
         "CSV",
         "Web Scraping"
+      ],
+      "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/QuotesToScrape"
+    },
+    {
+      "id": "pendu_game",
+      "title": "Jeu du Pendu en Python (POO)",
+      "description": "Une version console du jeu du Pendu développée en Python en utilisant la Programmation Orientée Objet (POO). Le jeu permet aux utilisateurs de deviner des mots lettre par lettre, avec une gestion des tentatives, des lettres déjà proposées et un affichage dynamique de l'état du mot à deviner.",
+      "images": [
+        "assets/img/projets/pendu_game/siteView_1.png",
+        "assets/img/projets/pendu_game/siteView_2.png",
+        "assets/img/projets/pendu_game/view_code_1.png",
+        "assets/img/projets/pendu_game/view_code_2.png",
+        "assets/img/projets/pendu_game/view_code_3.png"
+      ],
+      "techs": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Python",
+        "POO",
+        "Flask",
+        "Web Development",
+        "UX/UI"
       ],
       "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/QuotesToScrape"
     }
