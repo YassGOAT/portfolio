@@ -159,8 +159,7 @@
         "assets/img/projets/pendu_game/siteView_1.png",
         "assets/img/projets/pendu_game/siteView_2.png",
         "assets/img/projets/pendu_game/view_code_1.png",
-        "assets/img/projets/pendu_game/view_code_2.png",
-        "assets/img/projets/pendu_game/view_code_3.png"
+        "assets/img/projets/pendu_game/view_code_2.png"
       ],
       "techs": [
         "HTML",
@@ -172,7 +171,7 @@
         "Web Development",
         "UX/UI"
       ],
-      "demo": "https://blackjack-poo.onrender.com"
+      "demo": "https://pendu-poo.onrender.com"
     }
   ],
 

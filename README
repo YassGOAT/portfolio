@@ -1,0 +1,181 @@
+📘 Jeu du Pendu – Version POO + Flask + Web UI
+
+Un jeu du Pendu complet développé en Python orienté objet, avec :
+
+🎮 Mode Solo (mot aléatoire selon thème + difficulté)
+
+👥 Mode Deux joueurs (un joueur choisit le mot, l’autre devine)
+
+⭐ Système de score persistant
+
+🌐 Interface Web responsive via Flask
+
+🎨 UI moderne (HTML/CSS)
+
+🚀 Déployable facilement sur Render
+
+📁 Structure du projet
+pendu_poo/
+├── app.py
+├── jeu.py
+├── mots.py
+├── requirements.txt
+├── Procfile
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── secret.html
+│   └── game.html
+├── static/
+│   └── style.css
+└── mots/
+    ├── animaux_facile.txt
+    ├── animaux_normal.txt
+    ├── animaux_difficile.txt
+    ├── nourriture_facile.txt
+    ├── nourriture_normal.txt
+    ├── nourriture_difficile.txt
+    ├── informatique_facile.txt
+    ├── informatique_normal.txt
+    ├── informatique_difficile.txt
+    ├── sport_facile.txt
+    ├── sport_normal.txt
+    ├── sport_difficile.txt
+    ├── geo_facile.txt
+    ├── geo_normal.txt
+    └── geo_difficile.txt
+
+✨ Fonctionnalités
+🎮 Mode Solo
+
+Choix du thème (animaux, sport, géo, etc.)
+
+Choix de la difficulté (facile, normal, difficile)
+
+Mot généré automatiquement depuis les fichiers de mots
+
+Score automatique (victoires/défaites)
+
+👥 Mode Deux Joueurs
+
+Joueur 1 saisit un mot secret
+
+Joueur 2 tente de le deviner
+
+Score automatique :
+
+Joueur 1 marque un point si Joueur 2 perd
+
+Joueur 2 marque un point s’il devine
+
+🧠 Logique POO
+
+Classe Pendu
+
+Sérialisation pour la session Flask
+
+Gestion des lettres, mots complets, erreurs, ASCII-art du pendu
+
+🌐 Interface Web
+
+Flask 3.0
+
+HTML/CSS personnalisés (design sombre, propre et responsive)
+
+Composants : formulaires, cartes, tableaux de scores
+
+🚀 Installation locale
+1. Cloner le projet
+git clone https://github.com/ton-utilisateur/pendu_poo.git
+cd pendu_poo
+
+2. Installer les dépendances
+pip install -r requirements.txt
+
+3. Lancer localement
+python app.py
+
+
+Le site est accessible sur :
+👉 http://127.0.0.1:5000
+
+🌍 Déploiement sur Render
+⚙️ Fichiers requis
+
+Le projet doit contenir :
+
+requirements.txt
+
+flask==3.0.3
+gunicorn==23.0.0
+
+
+Procfile
+
+web: gunicorn app:app
+
+▶️ Étapes de déploiement
+
+Push ton code sur GitHub
+
+Va sur https://render.com
+
+New → Web Service
+
+Connecte ton repo
+
+Paramètres :
+
+Environment : Python
+
+Build Command : pip install -r requirements.txt
+
+Start Command : gunicorn app:app
+
+Lancer le déploiement
+
+Tu obtiendras une URL du type :
+https://pendu-poo.onrender.com
+
+🔁 Activer le déploiement automatique
+
+Dans Render :
+
+Settings → Auto Deploy → Automatic
+
+📝 Personnaliser les mots
+
+Les fichiers de mots sont dans :
+
+mots/<theme>_<difficulte>.txt
+
+
+Exemple :
+
+animaux_facile.txt
+
+sport_normal.txt
+
+geo_difficile.txt
+
+Pour ajouter des mots :
+→ Une ligne = un mot
+→ Pas d’accent, pas d’espace
+
+🧩 TODO / Améliorations possibles
+
+🎤 Ajout d’un mode vocal
+
+🏆 Système de leaderboard global (JSON / base de données)
+
+🌈 Thèmes graphiques (clair/sombre)
+
+📱 Version mobile améliorée
+
+🕹 Mode chronomètre
+
+🧑‍🤝‍🧑 Plus de modes multijoueur
+
+📚 Auteur
+
+Projet développé en Python pour apprendre la POO, Flask et la création d’interface web interactive.
