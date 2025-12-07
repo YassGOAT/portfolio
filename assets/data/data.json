@@ -181,7 +181,7 @@
     "city": "Firminy, France",
     "status": "Etudiant à la recherche d'une alternance ou d'une opportunité professionnelle",
     "links": [
-      { "label": "GitHub", "url": "https://github.com/YassGOAT", "icon": "assets/img/icons/github.png" },
+      { "label": "GitHub", "url": "https://github.com/yass-hmr", "icon": "assets/img/icons/github.png" },
       { "label": "LinkedIn", "url": "https://www.linkedin.com/in/yassine-hamri-31a121272", "icon": "assets/img/icons/linkedin.png" }
     ]
   }
