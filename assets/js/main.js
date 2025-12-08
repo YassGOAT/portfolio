@@ -443,7 +443,7 @@ function initProjects(projects) {
             githubLink.href = project.github;
             githubLink.target = "_blank";
             githubLink.rel = "noopener noreferrer";
-            githubLink.textContent = "Voir le dépôt GitHub";
+            githubLink.textContent = "Dépôt GitHub";
             githubLink.classList.add("btn-secondary");
             linksWrapper.appendChild(githubLink);
         }

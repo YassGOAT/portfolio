@@ -110,7 +110,8 @@
         "Web Development",
         "UX/UI" 
       ],
-      "demo": "https://blackjack-poo.onrender.com"
+      "demo": "https://blackjack-poo.onrender.com",
+      "github": "https://github.com/yass-hmr/Blackjack_POO"
     },
     {
       "id": "books-toscrape",
@@ -171,7 +172,8 @@
         "Web Development",
         "UX/UI"
       ],
-      "demo": "https://pendu-poo.onrender.com"
+      "demo": "https://pendu-poo.onrender.com",
+      "github": "https://github.com/yass-hmr/Pendu_POO"
     }
   ],
 

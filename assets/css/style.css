@@ -77,7 +77,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 90px;
+    height: 100px;
     width: 100%;
 }
 
@@ -114,13 +114,15 @@ a {
 /* NAVBAR */
 .navbar {
     display: flex;
-    margin-bottom: auto;          /* force la navbar à coller au bord droit du header */
+    margin-bottom: auto;
 }
 
 .navbar ul {
     list-style: none;
     display: flex;
     gap: 1.5rem;
+    align-items: center;
+    padding-top: 1.7rem;
 }
 
 
@@ -131,8 +133,8 @@ a {
     background: linear-gradient(135deg, #6165f1, #8f92ff);
     color: #fff;
     padding: 0.55rem 1.2rem;
-    border-radius: 999px;
-    font-size: 0.9rem;
+    border-radius: 99px;
+    font-size: 1.1rem;
     border: none;
     cursor: pointer;
     display: inline-flex;
@@ -151,7 +153,7 @@ a {
 .btn-secondary {
     padding: 0.55rem 1.2rem;
     border-radius: 999px;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     color: #c7c9ff;
     border: 1px solid #8183ff;
     background: rgba(129, 131, 255, 0.15);
@@ -170,9 +172,10 @@ a {
 
 /* Version compacte pour navbar */
 .nav-btn {
-    padding: 0.5rem 1rem !important;
-    font-size: 1rem !important;
-    box-shadow: none !important;
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    box-shadow: none;
+    box-shadow: 0 12px 25px rgba(79, 70, 229, 0.45);
 }
 
 /* =======================================================================================
@@ -469,13 +472,14 @@ a {
     border: 1px solid var(--border-soft);
     box-shadow: var(--shadow-soft);
     overflow: hidden;
-    padding: 1.1rem 1.2rem 1.4rem;   /* <-- ajoute du padding = espace avec les bords */
+    padding: 1.1rem 1.2rem 1.1rem;
 }
+
 
 .project-carousel {
     position: relative;
     width: 100%;
-    height: 260px;                 /* hauteur fixe */
+    height: 260px;
     overflow: hidden;
     border-radius: 12px;
     border: 1px solid var(--border-soft);
@@ -493,8 +497,8 @@ a {
 /* Chaque image prend toute la place */
 .project-carousel-inner img {
     width: 100%;
-    height: 100%;                  /* <-- très important */
-    object-fit: cover;             /* remplit sans laisser de vide */
+    height: 100%;
+    object-fit: cover;
     flex-shrink: 0;
     display: block;
 }
@@ -527,15 +531,18 @@ a {
     right: 8px;
 }
 
-
 .project-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
+/* Corps de la carte (texte + techs + boutons) */
 .project-card-body {
-    padding: 1.1rem 0.2rem 0;  /* léger padding interne */
+    padding: 1.1rem 0.2rem 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;            /* étire le body dans la carte */
 }
 
 /* Titre du projet */
@@ -546,28 +553,38 @@ a {
 /* Description */
 .project-card-desc {
     color: var(--text-muted);
-    margin-bottom: 0.8rem;      /* espace sous le texte */
+    margin-bottom: 0.8rem;
+    min-height: 150px;
 }
 
 /* Ligne des technos */
 .project-card-techs {
     font-size: 0.9rem;
     color: var(--accent-light);
-    margin-bottom: 1rem;        /* espace avant le bouton */
+    margin-bottom: 1.1rem;
 }
 
 /* Zone des boutons (GitHub / Démo) */
 .project-card-links {
     display: flex;
-    justify-content: center;    /* bouton centré */
-    margin-top: 0.2rem;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: auto;
+    padding-top: 0.4rem;
+    padding-bottom: 0;
+}
+
+/* Espacement des boutons eux-mêmes, même s'il n'y en a qu'un */
+.project-card-links > * {
+    margin: 0 0.6rem;
 }
 
 
 #btn-voir-projets {
     display: block;
-    margin: 1.8rem auto 0 auto; /* centre horizontalement */
+    margin: 1.8rem auto 0 auto;
 }
+
 
 /* ==========================
    MODAL PROJET (plein écran)
