@@ -85,7 +85,8 @@
         "Requests",
         "BeautifulSoup",
         "CSV",
-        "Web Scraping"
+        "Web Scraping",
+        "Assistance IA (chatGPT)"
       ],
       "github": "https://github.com/YassGOAT/python_projects/tree/ef947836d1c1ac67e8291cd3f84cc20061aca020/ScrapeThisSite"
     },
@@ -108,7 +109,8 @@
         "POO",
         "Flask",
         "Web Development",
-        "UX/UI" 
+        "UX/UI",
+        "Assistance IA (chatGPT)"
       ],
       "demo": "https://blackjack-poo.onrender.com",
       "github": "https://github.com/yass-hmr/Blackjack_POO"
@@ -129,7 +131,8 @@
         "Requests",
         "BeautifulSoup",
         "CSV",
-        "Web Scraping"
+        "Web Scraping",
+        "Assistance IA (chatGPT)"
       ],
       "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/BookToScrape"
     },
@@ -148,7 +151,8 @@
         "Requests",
         "BeautifulSoup",
         "CSV",
-        "Web Scraping"
+        "Web Scraping",
+        "Assistance IA (chatGPT)"
       ],
       "github": "https://github.com/YassGOAT/python_projects/tree/dbf13be282025f837506db281000934d3172c776/QuotesToScrape"
     },
@@ -170,7 +174,8 @@
         "POO",
         "Flask",
         "Web Development",
-        "UX/UI"
+        "UX/UI",
+        "Assistance IA (chatGPT)"
       ],
       "demo": "https://pendu-poo.onrender.com",
       "github": "https://github.com/yass-hmr/Pendu_POO"
